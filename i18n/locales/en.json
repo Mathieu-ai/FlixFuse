@@ -1,0 +1,20 @@
+{
+  "welcome": {
+    "title": "Welcome to FlixFuse",
+    "description": "Your ultimate destination for movie and TV show recommendations."
+  },
+  "playground": {
+    "title": "Playground",
+    "description": "Explore and test various features of FlixFuse.",
+    "chat": {
+      "title": "Chat Playground",
+      "btn": {
+        "start": "Start Chat",
+        "stop": "Stop Chat",
+        "reset": "Reset Chat",
+        "send": "Send",
+        "placeholder": "Type your message..."
+      }
+    }
+  }
+}

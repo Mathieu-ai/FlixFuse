@@ -1,0 +1,20 @@
+{
+  "welcome": {
+    "title": "Welkom bij FlixFuse",
+    "description": "Jouw ultieme bestemming voor film- en tv-showaanbevelingen."
+  },
+  "playground": {
+    "title": "Speelruimte",
+    "description": "Verken en test verschillende functies van FlixFuse.",
+    "chat": {
+      "title": "Chat Speelruimte",
+      "btn": {
+        "start": "Start Chat",
+        "stop": "Stop Chat",
+        "reset": "Reset Chat",
+        "send": "Verstuur",
+        "placeholder": "Typ je bericht..."
+      }
+    }
+  }
+}
