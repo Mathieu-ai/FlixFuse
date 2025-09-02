@@ -1,0 +1,442 @@
+{
+  "welcome": {
+    "title": "PawGoへようこそ",
+    "description": "あなたのためのペット向けソーシャルネットワーク兼コミュニティプラットフォーム。"
+  },
+  "privacy": {
+    "petProfiles": {
+      "title": "ペットプロフィール",
+      "description": "ペットのプロフィール情報を管理します。医療履歴、好み設定などを含みます。"
+    },
+    "title": "プライバシーポリシー",
+    "description": "私たちがどのようにあなたの個人情報やペットのデータを収集、使用、保護するかをご確認ください。",
+    "lastUpdated": "最終更新",
+    "tableOfContents": "目次",
+    "sections": {
+      "dataCollection": "収集するデータ",
+      "personalInformation": "個人情報",
+      "dataUsage": "データの利用方法",
+      "dataSharing": "データ共有と第三者",
+      "dataSecurity": "データの安全性",
+      "yourRights": "あなたの権利",
+      "dataRetention": "データの保持期間",
+      "cookiesTracking": "クッキーと追跡",
+      "childrenPrivacy": "児童のプライバシー",
+      "internationalTransfers": "国際転送",
+      "contact": "お問い合わせ"
+    }
+  },
+
+  "about": {
+    "title": "私たちについて",
+    "subtitle": "一歩ずつ、ひとつのハートをつなぐ",
+    "description": "PawGoについて — ペットオーナー、サービス提供者、動物好きのつながりを作るペットコミュニティプラットフォームです。",
+    "hero": {
+      "title": "一歩ずつ、ひとつのハートをつなぐ",
+      "description": "PawGoは単なるプラットフォームではありません。私たちはペットを愛するコミュニティであり、安全で意味のあるつながりを築き、ペットとの暮らしをより充実させることを目指しています。"
+    },
+    "beta": {
+      "title": "ベータ版",
+      "description": "PawGoは現在ベータ版です。ユーザーのフィードバックに基づき継続的に改善しています。"
+    },
+    "ourStory": {
+      "title": "私たちの物語",
+      "beginning": {
+        "heading": "始まり",
+        "p1": "PawGoは、ペットオーナーがつながり、経験を共有し、信頼できるサービスを見つけるためのより良い方法を必要としているというシンプルな気づきから始まりました。",
+        "p2": "小さなアイデアから始まったものが、今では世界中の何千ものペット家族をサポートするプラットフォームへと成長しました。"
+      },
+      "growing": {
+        "heading": "共に成長する",
+        "p1": "コミュニティが成長するにつれて、私たちもペットオーナーの本当のニーズをより深く理解してきました。",
+        "p2": "私たちは単なるネットワーキングプラットフォームから、ペットの飼育を支える包括的なエコシステムへと進化しました。",
+        "p3": "私たちの旅は続きます。誰もがより安全で支え合えるペットライフを送れるように努めています。"
+      }
+    },
+    "openSource": {
+      "p1": "私たちは透明性とコミュニティ主導の開発を信じています。だからこそPawGoはオープンソースです。",
+      "p2": "GitHubでコードをご覧ください",
+      "repoLinkText": "PawGo リポジトリ",
+      "starsLabel": "スター",
+      "forksLabel": "フォーク"
+    },
+    "whatWeDo": {
+      "title": "私たちの提供すること"
+    },
+    "coreValues": {
+      "title": "私たちのコアバリュー"
+    },
+    "founder": {
+      "title": "創設者を知る",
+      "paragraph1": "MathieuはPawGoの唯一の創設者です。動物を愛する生涯を通じて、家族に猫が加わったことでPawGoのアイデアが生まれました。彼の父が友人から猫を連れてきて、その猫が家族の一員になったことがきっかけです。",
+      "paragraph2": "ご質問や連絡を希望される場合は、以下までお気軽にどうぞ：",
+      "quickFacts": {
+        "github": "GitHubで活発にオープンソースに貢献",
+        "status": "独立開発者がベータのPawGoを構築中",
+        "story": "個人的なペットの里親経験に触発されて開始"
+      }
+    },
+    "safety": {
+      "alertTitle": "あなたの安全が最優先です",
+      "alertDescription": "私たちはすべてのやり取りにおいて、ペットとその家族を守るための包括的な安全対策を実施しています。"
+    },
+    "partnerships": {
+      "title": "コミュニティパートナーシップ"
+    },
+    "technology": {
+      "title": "技術とイノベーション"
+    },
+    "futureVision": {
+      "title": "私たちの未来ビジョン",
+      "heroTitle": "明日のペットコミュニティを築く",
+      "heroParagraph": "私たちは、すべてのペットオーナーが支え合うコミュニティ、専門サービス、そして最適なケアのためのリソースにアクセスできる世界を目指しています。"
+    },
+    "joinUs": {
+      "title": "コミュニティに参加する",
+      "heroTitle": "つながる準備はできましたか？",
+      "heroParagraph": "既にPawGoの喜びを体験している何千ものペット家族に参加しましょう。",
+      "ctaJoin": "今すぐPawGoに参加",
+      "ctaExplore": "機能を探る",
+      "ctaContact": "お問い合わせ",
+      "contactBlurb": "ご質問はお気軽に：",
+      "contactEmail": "hellopawgo.com"
+    },
+    "missionStatement": {
+      "statements": {
+        "safetyFirst": "安全第一",
+        "communityDriven": "コミュニティ主導",
+        "petFocused": "ペット重視",
+        "trustedPartners": "信頼できるパートナー",
+        "innovation": "イノベーション",
+        "compassion": "思いやり"
+      }
+    }
+
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー"
+  },
+  "services": {
+    "socialNetworking": {
+      "title": "ソーシャルネットワーキング",
+      "description": "近隣や遠方のペットオーナーとつながりましょう。",
+      "features": {
+        "profiles": "ペットプロフィールと写真共有",
+        "groups": "地域コミュニティグループ",
+        "events": "イベントの計画と調整",
+        "playdates": "プレイデートと散歩のスケジュール",
+        "venues": "ペットに優しい施設の発見"
+      }
+    },
+    "professionalServices": {
+      "title": "プロフェッショナルサービス",
+      "description": "検証済みのペット専門家にアクセスできます。",
+      "features": {
+        "veterinary": "獣医の相談",
+        "sitting": "プロのペットシッティング",
+        "walking": "ドッグウォーキングサービス",
+        "grooming": "グルーミングとスパトリートメント",
+        "training": "トレーニングと行動サポート"
+      }
+    },
+    "emergencySupport": {
+      "title": "緊急サポート",
+      "description": "緊急時に頼れるネットワークをご提供します。",
+      "features": {
+        "contacts": "24時間年中無休の緊急連絡先",
+        "lostPet": "迷子ペット通知システム",
+        "veterinaryReferrals": "緊急獣医紹介",
+        "rescue": "コミュニティ救助の調整",
+        "crisis": "危機サポートネットワーク"
+      }
+    },
+    "education": {
+      "title": "教育とリソース",
+      "description": "専門家から学び、より良いペットオーナーになりましょう。",
+      "features": {
+        "articles": "専門家の記事とガイド",
+        "tutorials": "トレーニングチュートリアルとコツ",
+        "health": "健康と栄養のアドバイス",
+        "breeds": "品種ごとの情報",
+        "qa": "専門家とのQ&A"
+      }
+    },
+    "marketplace": {
+      "title": "マーケットプレイス",
+      "description": "ペット関連の商品やサービスを見つけ、共有しましょう。",
+      "features": {
+        "buysell": "ペット用品の売買",
+        "recommendations": "サービスのおすすめ",
+        "reviews": "商品レビューと評価",
+        "directory": "地域ビジネスディレクトリ",
+        "classifieds": "クラシファイド広告"
+      }
+    },
+    "healthTracking": {
+      "title": "健康トラッキング",
+      "description": "ペットの包括的な健康記録を保管しましょう。",
+      "features": {
+        "vaccinations": "ワクチン管理",
+        "history": "医療履歴の保存",
+        "reminders": "予約リマインダー",
+        "medications": "投薬スケジュール",
+        "milestones": "健康のマイルストーン"
+      }
+    }
+  },
+  "values": {
+    "petSafety": {
+      "title": "ペットの安全を最優先",
+      "description": "私たちのすべての意思決定は、ペットとその家族の幸福と安全を優先します。",
+      "examples": {
+        "backgroundChecks": "サービス提供者への十分な身元確認",
+        "monitoring": "サービス中の監視",
+        "protocols": "緊急対応手順と訓練",
+        "education": "継続的な安全教育",
+        "zeroTolerance": "虐待や怠慢に対するゼロトレランス"
+      }
+    },
+    "communityFirst": {
+      "title": "コミュニティを第一に",
+      "description": "コミュニティの力がペットと人々の生活を豊かにすると信じています。",
+      "examples": {
+        "connections": "ペット家族間のつながり促進",
+        "localBusiness": "地域のペットビジネス支援",
+        "inclusive": "あらゆる飼い主にとって包摂的な空間の提供",
+        "knowledge": "知識の共有と相互支援の促進",
+        "friendships": "ペットを通じた長く続く友人関係"
+      }
+    },
+    "transparency": {
+      "title": "透明性と信頼",
+      "description": "私たちは透明性を重視し、ユーザーの信頼を得るために努めます。",
+      "examples": {
+        "communication": "方針や変更についての明確で誠実な説明",
+        "feedback": "オープンなフィードバックチャネルと迅速な対応",
+        "pricing": "隠れた料金のない明確な価格設定",
+        "safety": "公開された安全記録とインシデント報告",
+        "updates": "定期的なコミュニティ向けのアップデート"
+      }
+    },
+    "innovation": {
+      "title": "目的あるイノベーション",
+      "description": "テクノロジーとイノベーションを活用してペットと飼い主をより良くサポートします。",
+      "examples": {
+        "aiMatching": "AI駆動のマッチングで適切なマッチを提案",
+        "monitoring": "先進的な安全監視とアラート",
+        "health": "予防的な健康インサイト",
+        "experience": "あらゆるデバイスでのシームレスな体験",
+        "improvements": "ユーザーフィードバックに基づく継続的改善"
+      }
+    },
+    "inclusivity": {
+      "title": "包摂性とアクセシビリティ",
+      "description": "すべての飼い主がコミュニティとケア資源にアクセスできるべきだと考えます。",
+      "examples": {
+        "multilingual": "多言語サポートで多様なコミュニティに対応",
+        "accessibility": "障がいを持つユーザー向けのアクセシビリティ機能",
+        "pricing": "異なる経済状況に対応する柔軟な価格オプション",
+        "allPets": "あらゆる種類のペットと家族構成をサポート",
+        "education": "初めての飼い主向けの教育リソース提供"
+      }
+    },
+    "environmental": {
+      "title": "環境への責任",
+      "description": "私たちはペットが暮らす地球を大切にし、持続可能な取り組みを推進します。",
+      "examples": {
+        "carbon": "プラットフォーム運営のカーボンニュートラル化",
+        "ecoFriendly": "環境に優しいペット製品やサービスの推奨",
+        "local": "輸送を減らすために地域ビジネスを支援",
+        "responsible": "責任ある飼育行動の促進",
+        "conservation": "環境保全団体との協力"
+      }
+    }
+  },
+  "safety": {
+    "userVerification": {
+      "title": "ユーザー認証",
+      "description": "コミュニティの安全を確保するための包括的な認証プロセス。",
+      "measures": {
+        "idVerification": "政府発行の身分証明による確認",
+        "backgroundChecks": "サービス提供者の身辺調査",
+        "licenseVerification": "専門資格や免許の確認",
+        "references": "推薦者やレビューのチェック",
+        "monitoring": "継続的な安全監視",
+        "reverification": "定期的な再認証"
+      }
+    },
+    "petProtection": {
+      "title": "ペット保護",
+      "description": "すべてのやり取りにおいてペットを守るための具体的対策。",
+      "measures": {
+        "vaccination": "ワクチン記録の確認",
+        "assessment": "ペットの行動評価の要請",
+        "tracking": "サービス中のリアルタイム位置追跡",
+        "emergency": "緊急連絡先の通知",
+        "insurance": "サービスに関する保険の確認",
+        "hotline": "24/7の緊急獣医ホットライン"
+      }
+    },
+    "communityMonitoring": {
+      "title": "コミュニティ監視",
+      "description": "コミュニティ基準を維持するための積極的な監視。",
+      "measures": {
+        "aiModeration": "AIによるコンテンツ審査",
+        "humanReview": "報告内容の人手によるレビュー",
+        "alerts": "プロアクティブな安全アラート",
+        "reporting": "コミュニティからの通報機能",
+        "audits": "定期的な安全監査",
+        "response": "透明なインシデント対応手順"
+      }
+    },
+    "dataSecurity": {
+      "title": "データセキュリティ",
+      "description": "ユーザーとペットの情報を企業レベルのセキュリティで保護します。",
+      "measures": {
+        "encryption": "通信と保存の暗号化",
+        "storage": "安全に暗号化されたデータ保管",
+        "audits": "定期的なセキュリティ監査とペネトレーションテスト",
+        "compliance": "GDPRやCCPAなどの規制遵守",
+        "minimal": "最小限のデータ収集の原則",
+        "rights": "削除権とデータポータビリティの権利"
+      }
+    }
+  },
+  "stats": {
+    "activeFamilies": "アクティブなペット家族",
+    "registeredPets": "登録されたペット",
+    "cities": "世界の都市",
+    "rating": "平均評価"
+  },
+  "partnerships": {
+    "animalShelters": {
+      "title": "動物シェルター",
+      "description": "里親と救助活動を支援します"
+    },
+    "veterinaryClinics": {
+      "title": "獣医クリニック",
+      "description": "優れた医療ケアとペットをつなぎます"
+    },
+    "petBusinesses": {
+      "title": "ペット関連ビジネス",
+      "description": "地域のペットサービスと商品を促進します"
+    }
+  },
+  "technology": {
+    "aiMatching": {
+      "title": "AIによるマッチング",
+      "description": "ユーザーのプライバシーを中心に置きつつ、関連性の高いマッチを提案する軽量アルゴリズム。",
+      "benefits": {
+        "compatibility": "相性に基づく提案（地域優先）",
+        "location": "最小限の精度での位置情報による提案",
+        "activity": "追加の個人データを保持しない活動優先のマッチング",
+        "professional": "任意参加の専門家推薦",
+        "safety": "広範な解析を避け、安全信号を重視"
+      }
+    },
+    "safetyMonitoring": {
+      "title": "リアルタイム安全監視",
+      "description": "インタラクション中のペットとオーナーの安全を保証する先進的システム。",
+      "benefits": {
+        "gps": "散歩やサービス中のGPS追跡",
+        "checkins": "自動化された安全チェックイン",
+        "alerts": "緊急アラートシステム",
+        "detection": "イベント検知と対応",
+        "assessment": "予測的なリスク評価"
+      }
+    },
+    "healthIntegration": {
+      "title": "健康インテグレーション",
+      "description": "獣医システムや健康トラッキングデバイスとのシームレスな統合。",
+      "benefits": {
+        "reminders": "ワクチンの自動リマインダー",
+        "analysis": "健康トレンドの分析と洞察",
+        "wearables": "ウェアラブルデバイスのデータ統合",
+        "records": "獣医記録の同期",
+        "preventive": "予防的なケアの提案"
+      }
+    },
+    "smartCommunication": {
+      "title": "スマートコミュニケーション",
+      "description": "明確で安全なやり取りを支えるインテリジェントなメッセージングシステム。",
+      "benefits": {
+        "translation": "多言語ユーザー向けの自動翻訳",
+        "protocols": "安全を優先した通信プロトコル",
+        "emergency": "緊急時の通信チャネル",
+        "consultation": "専門家との相談ツール",
+        "moderation": "コミュニティディスカッションのモデレーション"
+      }
+    }
+  },
+  "future": {
+    "globalExpansion": {
+      "title": "グローバル展開",
+      "description": "PawGoを世界中のペット家族が利用できるようにし、ローカライズされたサポートとサービスを提供します。"
+    },
+    "aiHealth": {
+      "title": "AIによる健康インサイト",
+      "description": "個別化された健康アドバイスや早期警告を提供する高度なAI。"
+    },
+    "zeroHomelessness": {
+      "title": "ペットのホームレスゼロ",
+      "description": "シェルターやレスキューと協力し、すべてのペットに温かい永遠の家を見つけることを目指します。"
+    }
+  },
+  "misc": {
+    "howWeLiveValue": "この価値を実現する方法：",
+    "quickFacts": "クイックファクト",
+    "communityPartnerships": "私たちは動物福祉団体、獣医クリニック、ペットビジネスと協力し、より強くつながったコミュニティを作っています。",
+    "safetyTrust": "安全と信頼",
+    "communityImpact": "コミュニティへの影響",
+    "founderLocation": "所在地："
+  },
+  "nav": {
+    "playground": "Playground",
+    "privacy": "プライバシー",
+    "terms": "利用規約",
+    "about": "私たちについて"
+  },
+  "terms": {
+    "title": "利用規約",
+    "description": "当プラットフォームを安全かつ責任を持って利用するための包括的なガイドライン。",
+    "lastUpdated": "最終更新",
+    "tableOfContents": "目次",
+    "sections": {
+      "agreement": "1. 同意と受諾",
+      "userResponsibilities": "2. PawGo会員としての責任",
+      "petSafety": "3. ペットの安全とケア基準",
+      "communityGuidelines": "4. コミュニティガイドラインと行動規範",
+      "ageRequirements": "5. 年齢要件と未成年者保護",
+      "serviceProviders": "6. サービス提供者の条件",
+      "liability": "7. 責任と保険",
+      "platformRules": "8. プラットフォームの規則と運用",
+      "payments": "9. 支払いと返金",
+      "termination": "10. アカウントの終了",
+      "disputes": "11. 紛争解決",
+      "legal": "12. 法的情報"
+    },
+    "alerts": {
+      "welcomeTitle": "PawGoへようこそ！",
+      "welcomeDesc": "本プラットフォームを利用することで、ペットの安全と責任ある飼育を重視するコミュニティに参加することになります。",
+      "importantTitle": "重要",
+      "importantDesc": "これらの条件に同意いただけない場合は、PawGoの利用をお控えください。私たちはコミュニティのすべてのメンバーを守ることを目指しています。",
+      "petSafetyTitle": "ペットの安全が第一",
+      "petSafetyDesc": "ペットの福祉は最優先事項です。これらの基準は譲れません。"
+    }
+  },
+  "playground": {
+    "title": "Playground",
+    "description": "PawGoのさまざまな機能を試して体験してください。",
+    "chat": {
+      "title": "チャットプレイグラウンド",
+      "btn": {
+        "start": "チャットを開始",
+        "stop": "チャットを停止",
+        "reset": "リセット",
+        "send": "送信",
+        "placeholder": "メッセージを入力..."
+      }
+    }
+  }
+}

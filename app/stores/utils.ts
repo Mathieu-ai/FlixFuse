@@ -4,7 +4,9 @@ import { ref } from 'vue'
 export const useUtilsStore = defineStore('utils', () => {
   const languages = ref([
     { code: 'en', name: 'English', emoji: '🇬🇧' },
-    { code: 'nl', name: 'Nederlands', emoji: '🇳🇱' }
+    { code: 'nl', name: 'Nederlands', emoji: '🇳🇱' },
+    { code: 'cn', name: '中文', emoji: '🇨🇳' },
+    { code: 'jp', name: '日本語', emoji: '🇯🇵' }
   ])
 
   const selectedLanguage = ref(languages.value[0])

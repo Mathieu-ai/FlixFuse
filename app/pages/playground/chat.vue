@@ -1,17 +1,21 @@
+
 <template>
   <UContainer class="py-8 flex flex-col items-center">
-    <UCard class="w-full max-w-xl">
+    <UCard class="w-full max-w-xl bg-blue-50/80 rounded-3xl shadow-xl p-6">
       <div class="flex flex-col h-[60vh]">
         <div class="flex items-center justify-between mb-4 border-b pb-2">
-          <h2 class="text-xl font-semibold">{{ $t('playground.chat.title') }}</h2>
+          <h2 class="text-2xl font-extrabold text-blue-700 flex items-center gap-2">
+            <UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="text-green-500 text-2xl" />
+            {{ $t('playground.chat.title') }}
+          </h2>
         </div>
         <div class="flex-1 overflow-y-auto space-y-2 px-1" style="scrollbar-width: thin;">
           <div
             v-for="message in playground.messages"
             :key="message.id"
             :class="[
-              'rounded px-3 py-2 max-w-[80%] break-words',
-              message.isSelf ? 'bg-blue-900 ml-auto text-right' : 'bg-lime-800 mr-auto text-left'
+              'rounded-xl px-4 py-2 max-w-[80%] break-words',
+              message.isSelf ? 'bg-blue-200 ml-auto text-right text-blue-900' : 'bg-green-200 mr-auto text-left text-green-900'
             ]"
           >
             {{ message.text }}
@@ -26,7 +30,9 @@
             size="lg"
             autofocus
           />
-          <btn @click="handleSend" color="primary" size="lg">{{ $t('playground.chat.btn.send') }}</btn>
+          <UButton @click="handleSend" color="primary" size="lg" icon="i-heroicons-paper-airplane" class="rounded-full">
+            {{ $t('playground.chat.btn.send') }}
+          </UButton>
         </div>
       </div>
     </UCard>

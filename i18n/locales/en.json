@@ -1,11 +1,432 @@
 {
   "welcome": {
-    "title": "Welcome to FlixFuse",
-    "description": "Your ultimate destination for movie and TV show recommendations."
+    "title": "Welcome to PawGo",
+    "description": "Your ultimate pet social network and community platform."
+  },
+  "privacy": {
+    "petProfiles": {
+      "title": "Pet Profiles",
+      "description": "Manage your pet's profile information, including medical history, preferences, and more."
+    },
+    "title": "Privacy Policy",
+    "description": "Learn about how we collect, use, and protect your personal information and pet data.",
+    "lastUpdated": "Last updated",
+    "tableOfContents": "Table of Contents",
+    "sections": {
+      "dataCollection": "Data We Collect",
+      "personalInformation": "Personal Information",
+      "dataUsage": "How We Use Your Data",
+      "dataSharing": "Data Sharing & Third Parties",
+      "dataSecurity": "Data Security",
+      "yourRights": "Your Rights",
+      "dataRetention": "Data Retention",
+      "cookiesTracking": "Cookies & Tracking",
+      "childrenPrivacy": "Children's Privacy",
+      "internationalTransfers": "International Transfers",
+      "contact": "Contact Us"
+    }
+  },
+"about": {
+    "title": "About Us",
+    "subtitle": "Connecting Hearts, One Paw at a Time",
+    "description": "Learn about PawGo - the pet community platform connecting pet owners, service providers, and animal lovers worldwide.",
+    "hero": {
+      "title": "Connecting Hearts, One Paw at a Time",
+      "description": "PawGo is more than just a platform - we're a community of passionate pet lovers dedicated to creating meaningful connections, ensuring pet safety, and making pet ownership a joyful, supported experience for everyone."
+    },
+    "beta": {
+      "title": "Beta Version",
+      "description": "PawGo is currently in beta. We're continuously improving based on user feedback."
+    },
+    "ourStory": {
+      "title": "Our Story",
+      "beginning": {
+        "heading": "The Beginning",
+        "p1": "PawGo started with a simple observation: pet owners needed a better way to connect, share experiences, and find trusted services for their beloved companions.",
+        "p2": "What began as a small idea has grown into a comprehensive platform that serves thousands of pet families worldwide."
+      },
+      "growing": {
+        "heading": "Growing Together",
+        "p1": "As our community has grown, so has our understanding of what pet owners truly need.",
+        "p2": "We've evolved from a simple networking platform to a comprehensive ecosystem that supports every aspect of pet ownership.",
+        "p3": "Our journey continues as we work to make pet ownership more accessible, safe, and enjoyable for everyone."
+      }
+    },
+    "openSource": {
+      "p1": "We believe in transparency and community-driven development. That's why PawGo is open source.",
+      "p2": "Check out our code on GitHub",
+      "repoLinkText": "PawGo Repository",
+      "starsLabel": "stars",
+      "forksLabel": "forks"
+    },
+    "whatWeDo": {
+      "title": "What We Do"
+    },
+    "coreValues": {
+      "title": "Our Core Values"
+    },
+    "founder": {
+      "title": "Meet Our Founder",
+      "paragraph1": "Mathieu is the sole creator of PawGo. A lifelong animal lover — PawGo grew after a cat joined the family; Mathieu's father brought the cat from a friend, and the cat now lives in Mathieu's home. That experience inspired him to build a safer, kinder place for pet owners to connect and help one another.",
+      "paragraph2": "Have questions or want to connect? Feel free to reach out at",
+      "quickFacts": {
+        "github": "Active open source contributor on GitHub",
+        "status": "Solo developer building PawGo in beta",
+        "story": "Inspired by personal pet adoption experience"
+      }
+    },
+    "safety": {
+      "alertTitle": "Your Safety Is Our Priority",
+      "alertDescription": "We implement comprehensive safety measures to protect both pets and their families at every interaction."
+    },
+    "partnerships": {
+      "title": "Community Partnerships"
+    },
+    "technology": {
+      "title": "Technology & Innovation"
+    },
+    "futureVision": {
+      "title": "Our Vision for the Future",
+      "heroTitle": "Building Tomorrow's Pet Community",
+      "heroParagraph": "We envision a world where every pet owner has access to a supportive community, professional services, and the resources they need to provide the best possible care for their companions."
+    },
+    "joinUs": {
+      "title": "Join Our Community",
+      "heroTitle": "Ready to Connect?",
+      "heroParagraph": "Join thousands of pet families who have already discovered the joy of being part of the PawGo community.",
+      "ctaJoin": "Join PawGo Today",
+      "ctaExplore": "Explore Features",
+      "ctaContact": "Get in Touch",
+      "contactBlurb": "Questions? We'd love to hear from you at",
+      "contactEmail": "hellopawgo.com"
+    },
+    "missionStatement": {
+      "statements": {
+        "safetyFirst": "Safety First",
+        "communityDriven": "Community Driven",
+        "petFocused": "Pet-Focused",
+        "trustedPartners": "Trusted Partners",
+        "innovation": "Innovation",
+        "compassion": "Compassion"
+      }
+    }
+
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error"
+  },
+  "services": {
+    "socialNetworking": {
+      "title": "Social Networking",
+      "description": "Connect with fellow pet owners in your neighborhood and beyond.",
+      "features": {
+        "profiles": "Pet profiles and photo sharing",
+        "groups": "Local community groups",
+        "events": "Event planning and coordination",
+        "playdates": "Playdates and walk scheduling",
+        "venues": "Pet-friendly venue discovery"
+      }
+    },
+    "professionalServices": {
+      "title": "Professional Services",
+      "description": "Access verified pet professionals for all your care needs.",
+      "features": {
+        "veterinary": "Veterinary consultations",
+        "sitting": "Professional pet sitting",
+        "walking": "Dog walking services",
+        "grooming": "Grooming and spa treatments",
+        "training": "Training and behavior support"
+      }
+    },
+    "emergencySupport": {
+      "title": "Emergency Support",
+      "description": "Get help when you need it most with our emergency network.",
+      "features": {
+        "contacts": "24/7 emergency contacts",
+        "lostPet": "Lost pet alert system",
+        "veterinaryReferrals": "Emergency veterinary referrals",
+        "rescue": "Community rescue coordination",
+        "crisis": "Crisis support network"
+      }
+    },
+    "education": {
+      "title": "Education & Resources",
+      "description": "Learn and grow as a pet parent with expert guidance.",
+      "features": {
+        "articles": "Expert articles and guides",
+        "tutorials": "Training tutorials and tips",
+        "health": "Health and nutrition advice",
+        "breeds": "Breed-specific information",
+        "qa": "Q&A with professionals"
+      }
+    },
+    "marketplace": {
+      "title": "Marketplace",
+      "description": "Find and share pet-related items and services.",
+      "features": {
+        "buysell": "Buy and sell pet supplies",
+        "recommendations": "Service recommendations",
+        "reviews": "Product reviews and ratings",
+        "directory": "Local business directory",
+        "classifieds": "Classified advertisements"
+      }
+    },
+    "healthTracking": {
+      "title": "Health Tracking",
+      "description": "Keep comprehensive health records for your pets.",
+      "features": {
+        "vaccinations": "Vaccination tracking",
+        "history": "Medical history storage",
+        "reminders": "Appointment reminders",
+        "medications": "Medication schedules",
+        "milestones": "Health milestone tracking"
+      }
+    }
+  },
+  "values": {
+    "petSafety": {
+      "title": "Pet Safety Above All",
+      "description": "Every decision we make prioritizes the wellbeing and safety of pets and their families.",
+      "examples": {
+        "backgroundChecks": "Comprehensive background checks for service providers",
+        "monitoring": "Real-time safety monitoring during services",
+        "protocols": "Emergency response protocols and training",
+        "education": "Continuous safety education for community members",
+        "zeroTolerance": "Zero tolerance for any form of animal abuse or neglect"
+      }
+    },
+    "communityFirst": {
+      "title": "Community First",
+      "description": "We believe in the power of community to enrich the lives of both pets and their humans.",
+      "examples": {
+        "connections": "Fostering genuine connections between pet families",
+        "localBusiness": "Supporting local pet businesses and services",
+        "inclusive": "Creating inclusive spaces for all types of pet owners",
+        "knowledge": "Encouraging knowledge sharing and mutual support",
+        "friendships": "Building lasting friendships through shared pet love"
+      }
+    },
+    "transparency": {
+      "title": "Transparency & Trust",
+      "description": "We operate with complete transparency and work continuously to earn and maintain trust.",
+      "examples": {
+        "communication": "Clear, honest communication about policies and changes",
+        "feedback": "Open feedback channels and responsive support",
+        "pricing": "Transparent pricing with no hidden fees",
+        "safety": "Public safety records and incident reporting",
+        "updates": "Regular community updates and progress reports"
+      }
+    },
+    "innovation": {
+      "title": "Innovation with Purpose",
+      "description": "We embrace technology and innovation to better serve pets and their families.",
+      "examples": {
+        "aiMatching": "AI-powered matching for compatible pets and owners",
+        "monitoring": "Advanced safety monitoring and alert systems",
+        "health": "Predictive health insights and preventive care reminders",
+        "experience": "Seamless user experience across all devices",
+        "improvements": "Continuous platform improvements based on user feedback"
+      }
+    },
+    "inclusivity": {
+      "title": "Inclusivity & Accessibility",
+      "description": "Every pet owner deserves access to community and care, regardless of circumstances.",
+      "examples": {
+        "multilingual": "Multilingual support for diverse communities",
+        "accessibility": "Accessibility features for users with disabilities",
+        "pricing": "Flexible pricing options for different economic situations",
+        "allPets": "Support for all types of pets and family structures",
+        "education": "Educational resources for first-time pet owners"
+      }
+    },
+    "environmental": {
+      "title": "Environmental Responsibility",
+      "description": "We care about the planet our pets call home and promote sustainable practices.",
+      "examples": {
+        "carbon": "Carbon-neutral platform operations",
+        "ecoFriendly": "Promoting eco-friendly pet products and services",
+        "local": "Supporting local businesses to reduce transportation impact",
+        "responsible": "Encouraging responsible pet ownership practices",
+        "conservation": "Partnership with environmental conservation organizations"
+      }
+    }
+  },
+  "safety": {
+    "userVerification": {
+      "title": "User Verification",
+      "description": "Comprehensive verification processes to ensure community safety.",
+      "measures": {
+        "idVerification": "Government ID verification for all users",
+        "backgroundChecks": "Background checks for service providers",
+        "licenseVerification": "Professional license verification",
+        "references": "Reference checks and reviews",
+        "monitoring": "Continuous monitoring for safety violations",
+        "reverification": "Regular re-verification of credentials"
+      }
+    },
+    "petProtection": {
+      "title": "Pet Protection",
+      "description": "Specific measures to protect pets during all interactions.",
+      "measures": {
+        "vaccination": "Vaccination record verification",
+        "assessment": "Pet behavior assessment requirements",
+        "tracking": "Real-time location tracking during services",
+        "emergency": "Emergency contact notifications",
+        "insurance": "Pet insurance verification for services",
+        "hotline": "24/7 emergency veterinary hotline"
+      }
+    },
+    "communityMonitoring": {
+      "title": "Community Monitoring",
+      "description": "Active monitoring to maintain community standards.",
+      "measures": {
+        "aiModeration": "AI-powered content moderation",
+        "humanReview": "Human review of all reported content",
+        "alerts": "Proactive safety alert systems",
+        "reporting": "Community reporting mechanisms",
+        "audits": "Regular safety audits and assessments",
+        "response": "Transparent incident response procedures"
+      }
+    },
+    "dataSecurity": {
+      "title": "Data Security",
+      "description": "Protecting user and pet information with enterprise-grade security.",
+      "measures": {
+        "encryption": "End-to-end encryption for all communications",
+        "storage": "Secure, encrypted data storage",
+        "audits": "Regular security audits and penetration testing",
+        "compliance": "GDPR and CCPA compliance",
+        "minimal": "Minimal data collection principles",
+        "rights": "Right to deletion and data portability"
+      }
+    }
+  },
+  "stats": {
+    "activeFamilies": "Active Pet Families",
+    "registeredPets": "Registered Pets",
+    "cities": "Cities Worldwide",
+    "rating": "Average Rating"
+  },
+  "partnerships": {
+    "animalShelters": {
+      "title": "Animal Shelters",
+      "description": "Supporting pet adoption and rescue efforts"
+    },
+    "veterinaryClinics": {
+      "title": "Veterinary Clinics",
+      "description": "Connecting pets with quality medical care"
+    },
+    "petBusinesses": {
+      "title": "Pet Businesses",
+      "description": "Promoting local pet services and products"
+    }
+  },
+  "technology": {
+    "aiMatching": {
+      "title": "AI-Powered Matching",
+      "description": "Lightweight algorithms to help suggest relevant matches while minimising data exposure and keeping user privacy central.",
+      "benefits": {
+        "compatibility": "Personality-based compatibility suggestions (local-first where possible)",
+        "location": "Location-aware suggestions with minimal precision exposure",
+        "activity": "Activity preference matching without storing extra personal data",
+        "professional": "Opt-in professional recommendations",
+        "safety": "Focused safety signals without broad profiling"
+      }
+    },
+    "safetyMonitoring": {
+      "title": "Real-Time Safety Monitoring",
+      "description": "Advanced monitoring systems that ensure pet and owner safety during all interactions.",
+      "benefits": {
+        "gps": "GPS tracking during walks and services",
+        "checkins": "Automated safety check-ins",
+        "alerts": "Emergency alert systems",
+        "detection": "Incident detection and response",
+        "assessment": "Predictive safety risk assessment"
+      }
+    },
+    "healthIntegration": {
+      "title": "Health Integration",
+      "description": "Seamless integration with veterinary systems and health tracking devices.",
+      "benefits": {
+        "reminders": "Automated vaccination reminders",
+        "analysis": "Health trend analysis and insights",
+        "wearables": "Wearable device data integration",
+        "records": "Veterinary record synchronization",
+        "preventive": "Preventive care recommendations"
+      }
+    },
+    "smartCommunication": {
+      "title": "Smart Communication",
+      "description": "Intelligent messaging systems that facilitate clear, safe communication.",
+      "benefits": {
+        "translation": "Auto-translation for multilingual users",
+        "protocols": "Safety-first messaging protocols",
+        "emergency": "Emergency communication channels",
+        "consultation": "Professional consultation tools",
+        "moderation": "Community discussion moderation"
+      }
+    }
+  },
+  "future": {
+    "globalExpansion": {
+      "title": "Global Expansion",
+      "description": "Making PawGo available to pet families worldwide with localized support and services."
+    },
+    "aiHealth": {
+      "title": "AI Health Insights",
+      "description": "Advanced AI that provides personalized health recommendations and early warning systems."
+    },
+    "zeroHomelessness": {
+      "title": "Zero Pet Homelessness",
+      "description": "Working with shelters and rescues to ensure every pet finds a loving forever home."
+    }
+  },
+  "misc": {
+    "howWeLiveValue": "How we live this value:",
+    "quickFacts": "Quick facts",
+    "communityPartnerships": "We're proud to partner with animal welfare organizations, veterinary clinics, and pet businesses to create a stronger, more connected pet community.",
+    "safetyTrust": "Safety & Trust",
+    "communityImpact": "Community Impact",
+    "founderLocation": "Location:"
+  },
+  "nav": {
+    "playground": "Playground",
+    "privacy": "Privacy",
+    "terms": "TOS",
+    "about": "About"
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "description": "Comprehensive guidelines for using our pet community platform safely and responsibly.",
+    "lastUpdated": "Last updated",
+    "tableOfContents": "Table of Contents",
+    "sections": {
+      "agreement": "1. Agreement & Acceptance",
+      "userResponsibilities": "2. Your Responsibilities as a PawGo Member",
+      "petSafety": "3. Pet Safety & Care Standards",
+      "communityGuidelines": "4. Community Guidelines & Behavior",
+      "ageRequirements": "5. Age Requirements & Minor Protection",
+      "serviceProviders": "6. Service Provider Terms",
+      "liability": "7. Liability & Insurance",
+      "platformRules": "8. Platform Rules & Enforcement",
+      "payments": "9. Payments & Refunds",
+      "termination": "10. Account Termination",
+      "disputes": "11. Dispute Resolution",
+      "legal": "12. Legal Information"
+    },
+    "alerts": {
+      "welcomeTitle": "Welcome to PawGo!",
+      "welcomeDesc": "By using our platform, you're joining a community dedicated to pet safety and responsible pet ownership.",
+      "importantTitle": "Important",
+      "importantDesc": "If you don't agree with these terms, please don't use PawGo. We're here to protect everyone in our community.",
+      "petSafetyTitle": "Pet Safety First",
+      "petSafetyDesc": "The wellbeing of pets is our top priority. These standards are non-negotiable."
+    }
   },
   "playground": {
     "title": "Playground",
-    "description": "Explore and test various features of FlixFuse.",
+    "description": "Explore and test various features of PawGo.",
     "chat": {
       "title": "Chat Playground",
       "btn": {

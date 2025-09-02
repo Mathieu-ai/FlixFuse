@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "pawgo",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -8,7 +8,13 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:generate": "pnpx prisma generate",
+    "db:push": "pnpx prisma db push",
+    "db:migrate": "pnpx prisma migrate dev",
+    "db:create": "docker compose up -d",
+    "db:studio": "pnpx prisma studio",
+    "db:seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nuxt/content": "3.6.3",
@@ -20,27 +26,34 @@
     "@nuxt/ui-pro": "^3.3.0",
     "@nuxtjs/i18n": "^10.0.4",
     "@pinia/nuxt": "0.11.2",
-    "@prisma/client": "^6.13.0",
+    "@prisma/client": "^6",
+    "@prisma/extension-accelerate": "^2.0.2",
+    "@prisma/extension-optimize": "^2.0.0",
+    "@prisma/instrumentation": "^6",
     "@unhead/vue": "^2.0.14",
     "better-sqlite3": "^12.2.0",
     "crossws": "^0.3.5",
     "eslint": "^9.33.0",
+    "ioredis": "^5.4.1",
     "nodemailer": "^7.0.5",
     "nuxt": "^4.0.3",
     "nuxt-auth-utils": "0.5.23",
     "nuxt-mapbox": "1.6.3",
     "pinia": "^3.0.3",
-    "prisma": "^6.13.0",
     "tailwindcss": "^4.1.11",
     "twilio": "^5.8.0",
     "typescript": "^5.9.2",
+    "valibot": "^1.1.0",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1",
     "zod": "^4.0.16"
   },
   "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.2",
     "@iconify-json/lucide": "^1.2.62",
     "@types/nodemailer": "^6.4.17",
-    "mapbox-gl": "^3.14.0"
+    "mapbox-gl": "^3.14.0",
+    "prisma": "^6",
+    "ts-node": "^10.9.2"
   }
 }

@@ -1,0 +1,4914 @@
+// Enhanced Prisma schema for Pet Social Network
+// Comprehensive schema with improved structure and scalability
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========== USER MANAGEMENT ==========
+
+model User {
+  id                     String      @id @default(cuid())
+  email                  String?     @unique
+  username               String?     @unique // Optional username for social features
+  firstName              String
+  lastName               String?
+  displayName            String? // Custom display name
+  profilePicture         String?
+  phoneNumber            String?
+  whatsappNumber         String? // For easy communication
+  dateOfBirth            DateTime?
+  gender                 UserGender?
+  passwordHash           String
+  isEmailVerified        Boolean     @default(false)
+  isPhoneVerified        Boolean     @default(false)
+  emailVerificationToken String?
+  phoneVerificationToken String?
+  passwordResetToken     String?
+  passwordResetExpires   DateTime?
+  twoFactorEnabled       Boolean     @default(false)
+  twoFactorSecret        String?
+  backupCodes            String[] // Array of backup codes
+  role                   UserRole    @default(MEMBER)
+  status                 UserStatus  @default(ACTIVE)
+  isOnline               Boolean     @default(false)
+
+  // Location & Geographic Info
+  location Json? // { neighborhood: string, city: string, zipCode: string, coordinates: { lat: number, lng: number }, radius: number }
+  timeZone String? @default("Europe/Paris")
+  language String  @default("fr")
+
+  // Social & Preferences
+  bio               String?         @db.Text
+  interests         String[] // Array of interests: ["training", "hiking", "photography"]
+  personalityTraits String[] // ["patient", "active", "social", "calm"]
+  experienceLevel   ExperienceLevel @default(BEGINNER)
+
+  // Walk Preferences - More detailed
+  walkPreferences Json? // { preferredTimes: string[], maxDistance: number, groupSizePreference: string, pacePreference: string, terrainPreference: string[] }
+
+  // Availability Schedule
+  availability Json? // Weekly schedule: { monday: [{ start: "09:00", end: "11:00" }], ... }
+
+  // Privacy & Communication Settings
+  privacySettings          Json? // { profileVisibility: string, locationSharing: string, contactInfo: string, activitySharing: string }
+  notificationSettings     Json? // { email: {...}, push: {...}, sms: {...} }
+  communicationPreferences Json? // { preferredMethod: string, responseTime: string, languages: string[] }
+
+  // Platform Settings
+  theme String @default("light") // "light", "dark", "auto"
+  units String @default("metric") // "metric", "imperial"
+
+  // Activity & Statistics
+  points          Int       @default(0) // Gamification points
+  level           Int       @default(1) // User level based on activity
+  totalWalks      Int       @default(0)
+  totalDistanceKm Float     @default(0)
+  joinDate        DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lastActiveAt    DateTime?
+  lastLoginAt     DateTime?
+  deactivatedAt   DateTime? // For soft deletes
+
+  // Relations
+  pets                     Pet[]
+  walks                    Walk[]                    @relation("WalkCreator")
+  walkParticipations       WalkParticipation[]
+  events                   Event[]                   @relation("EventCreator")
+  eventParticipations      EventParticipation[]
+  posts                    Post[]
+  comments                 Comment[]
+  likes                    Like[]
+  messagesSent             Message[]                 @relation("MessageSender")
+  messagesReceived         Message[]                 @relation("MessageReceiver")
+  conversationParticipants ConversationParticipant[]
+  userBadges               UserBadge[]
+  notifications            Notification[]
+  reports                  Report[]                  @relation("ReportedBy")
+  reportedUsers            Report[]                  @relation("ReportedUser")
+  venueReviews             VenueReview[]
+  petHealthRecords         PetHealthRecord[]
+  friendshipsSent          Friendship[]              @relation("FriendshipRequester")
+  friendshipsReceived      Friendship[]              @relation("FriendshipReceiver")
+  userBlocks               UserBlock[]               @relation("BlockedBy")
+  blockedUsers             UserBlock[]               @relation("BlockedUser")
+  emergencyContacts        EmergencyContact[]
+  serviceProviderProfile   ServiceProviderProfile?
+  bookings                 Booking[]
+  reviews                  Review[]
+  activities               UserActivity[]
+  locationHistory          LocationHistory[]
+  geofences                Geofence[]
+  geofenceEvents           GeofenceEvent[]
+  contentModerations       ContentModeration[]
+  searchQueries            SearchQuery[]
+  subscription             Subscription?
+  auditLogs                AuditLog[]
+  postShares               PostShare[]
+  postSaves                PostSave[]
+  ownedVenues              Venue[]                   @relation("VenueOwner")
+
+  // New relations for additional models
+  classifieds          Classified[]         @relation("ClassifiedAuthor")
+  classifiedInquiries  ClassifiedInquiry[]  @relation("ClassifiedInquirer")
+  classifiedFavorites  ClassifiedFavorite[] @relation("ClassifiedFavoriter")
+  questions            Question[]           @relation("QuestionAuthor")
+  answers              Answer[]             @relation("AnswerAuthor")
+  questionVotes        QuestionVote[]       @relation("QuestionVoter")
+  answerVotes          AnswerVote[]         @relation("AnswerVoter")
+  groupMemberships     GroupMembership[]    @relation("GroupMember")
+  groupPosts           GroupPost[]          @relation("GroupPostAuthor")
+  organizedGroupEvents GroupEvent[]         @relation("GroupEventOrganizer")
+
+  // Pet Lending & Contracts
+  petsLentOut            PetLendingContract[] @relation("PetOwnerLender")
+  petsBorrowed           PetLendingContract[] @relation("PetBorrower")
+  witnessedContracts     ContractWitness[]
+  supervisedHandovers    PetHandover[]        @relation("HandoverSupervisor")
+  sentPetHandovers       PetHandover[]        @relation("PetOwnerHandover")
+  receivedPetHandovers   PetHandover[]        @relation("PetBorrowerHandover")
+  emergencyResponses     EmergencyResponse[]
+  ownedInsurancePolicies PetInsurancePolicy[]
+
+  // Professional Network
+  vetProfile               VetProfile?
+  vetConnectionsAsClient   VetConnection[]          @relation("ClientConnections")
+  consultations            VetConsultation[]        @relation("VetConsultation")
+  clientConsultations      VetConsultation[]        @relation("ClientConsultation")
+  receivedVetReviews       VetReview[]              @relation("ReviewedVeterinarian")
+  givenVetReviews          VetReview[]              @relation("VetReviewAuthor")
+  createdMedicalRecords    PetMedicalRecord[]       @relation("RecordCreator")
+  accessibleMedicalRecords PetMedicalRecordAccess[]
+
+  // Security & Verification
+  identityVerification IdentityVerification?
+  backgroundCheck      BackgroundCheck?
+  trustScores          TrustScore[]
+  securityDeposits     SecurityDeposit[]     @relation("DepositPayer")
+  receivedDeposits     SecurityDeposit[]     @relation("DepositReceiver")
+
+  // Legal & Compliance
+  legalDocuments    LegalDocument[]
+  contractTemplates ContractTemplate[]
+  insuranceClaims   InsuranceClaim[]
+
+  @@map("users")
+}
+
+enum UserGender {
+  MALE
+  FEMALE
+  NON_BINARY
+  PREFER_NOT_TO_SAY
+}
+
+enum UserRole {
+  MEMBER
+  VIP_MEMBER
+  MODERATOR
+  ADMIN
+  SUPER_ADMIN
+  SERVICE_PROVIDER // For vets, groomers, etc.
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  BANNED
+  PENDING_VERIFICATION
+  DELETED
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+  PROFESSIONAL
+}
+
+// ========== PET MANAGEMENT ==========
+
+model Pet {
+  id             String     @id @default(cuid())
+  name           String
+  nickname       String? // Pet's nickname
+  species        PetSpecies
+  breed          String?
+  mixedBreed     Boolean    @default(false)
+  secondaryBreed String? // For mixed breeds
+
+  // Physical Characteristics
+  age         Int?
+  ageUnit     AgeUnit    @default(YEARS) // months, years
+  gender      PetGender?
+  isNeutered  Boolean    @default(false)
+  weight      Float?
+  weightUnit  String     @default("kg")
+  height      Float? // For dogs especially
+  color       String?
+  markings    String?
+  microchipId String?
+
+  // Media
+  photos       String[] // Array of image URLs
+  videos       String[] // Array of video URLs
+  profilePhoto String? // Main profile photo
+
+  // Personality & Behavior - More detailed arrays
+  personalityTraits String[] // ["friendly", "energetic", "calm", "playful", "protective"]
+  behaviorTraits    String[] // ["good_with_kids", "good_with_dogs", "good_with_cats", "leash_trained"]
+  energyLevel       EnergyLevel?
+  socialLevel       SocialLevel?
+  trainingLevel     TrainingLevel?
+
+  // Health & Medical
+  allergies           String[] // Array of allergies
+  medicalConditions   String[] // Array of conditions
+  medications         String[] // Current medications
+  specialNeeds        String?   @db.Text
+  dietaryRestrictions String[]
+  isVaccinated        Boolean   @default(false)
+  lastVetVisit        DateTime?
+  nextVetVisit        DateTime?
+
+  // Compatibility & Social
+  compatibility      Json? // { dogs: string, cats: string, children: string, strangers: string }
+  playStyle          String[] // ["gentle", "rough", "chase", "fetch", "tug"]
+  favoriteActivities String[] // ["walking", "running", "swimming", "playing_fetch"]
+  fearsTriggers      String[] // ["thunderstorms", "fireworks", "crowds"]
+
+  // Care Instructions
+  feedingSchedule  Json? // { times: string[], amount: string, food_type: string }
+  exerciseNeeds    Json? // { daily_minutes: number, intensity: string, preferred_activities: string[] }
+  careInstructions String? @db.Text
+
+  // Status & Visibility
+  isActive    Boolean @default(true)
+  isPublic    Boolean @default(true)
+  isLost      Boolean @default(false)
+  lostDetails Json? // If pet is lost: { date: DateTime, location: string, description: string }
+
+  // Ownership & Emergency
+  ownerId          String
+  emergencyContact Json? // { name: string, phone: string, relationship: string }
+
+  // Metadata
+  registrationNumber String? // Official registration
+  pedigree           Boolean  @default(false)
+  insuranceInfo      Json? // Pet insurance details
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  owner               User                 @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  walkParticipations  WalkParticipation[]
+  eventParticipations EventParticipation[]
+  healthRecords       PetHealthRecord[]
+  posts               Post[] // Posts specifically about this pet
+
+  // Pet Lending Relations
+  contracts PetLendingContract[]
+
+  @@map("pets")
+}
+
+enum PetSpecies {
+  DOG
+  CAT
+  RABBIT
+  BIRD
+  HAMSTER
+  GUINEA_PIG
+  FERRET
+  REPTILE
+  FISH
+  HORSE
+  OTHER
+}
+
+enum PetGender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum AgeUnit {
+  WEEKS
+  MONTHS
+  YEARS
+}
+
+enum EnergyLevel {
+  VERY_LOW
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+}
+
+enum SocialLevel {
+  SHY
+  CAUTIOUS
+  FRIENDLY
+  VERY_SOCIAL
+  OVERLY_SOCIAL
+}
+
+enum TrainingLevel {
+  UNTRAINED
+  BASIC
+  INTERMEDIATE
+  ADVANCED
+  PROFESSIONAL
+}
+
+// ========== FRIENDSHIP SYSTEM ==========
+
+model Friendship {
+  id          String           @id @default(cuid())
+  requesterId String
+  receiverId  String
+  status      FriendshipStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  acceptedAt  DateTime?
+  rejectedAt  DateTime?
+  blockedAt   DateTime?
+
+  requester User @relation("FriendshipRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  receiver  User @relation("FriendshipReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, receiverId])
+  @@map("friendships")
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+model UserBlock {
+  id        String   @id @default(cuid())
+  blockerId String
+  blockedId String
+  reason    String?
+  createdAt DateTime @default(now())
+
+  blocker User @relation("BlockedBy", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@map("user_blocks")
+}
+
+// ========== EMERGENCY CONTACTS ==========
+
+model EmergencyContact {
+  id           String   @id @default(cuid())
+  userId       String
+  name         String
+  phoneNumber  String
+  email        String?
+  relationship String // "family", "friend", "neighbor", "vet"
+  priority     Int      @default(1) // 1 = primary, 2 = secondary, etc.
+  notes        String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("emergency_contacts")
+}
+
+// ========== ENHANCED PET HEALTH RECORDS ==========
+
+model PetHealthRecord {
+  id             String           @id @default(cuid())
+  petId          String
+  recordType     HealthRecordType
+  title          String
+  description    String?          @db.Text
+  date           DateTime
+  veterinarian   String?
+  vetClinic      String?
+  vetPhone       String?
+  nextDueDate    DateTime?
+  cost           Float?
+  currency       String           @default("EUR")
+  documents      String[] // Array of document URLs
+  photos         String[] // Array of photo URLs
+  isPrivate      Boolean          @default(true)
+  remindOwner    Boolean          @default(false)
+  reminderDays   Int?             @default(7) // Days before to remind
+  tags           String[] // Custom tags for organization
+  symptoms       String[] // If medical issue
+  treatment      String?          @db.Text
+  followUpNeeded Boolean          @default(false)
+  followUpDate   DateTime?
+  createdBy      String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  // Relations
+  pet     Pet  @relation(fields: [petId], references: [id], onDelete: Cascade)
+  creator User @relation(fields: [createdBy], references: [id])
+
+  @@map("pet_health_records")
+}
+
+enum HealthRecordType {
+  VACCINATION
+  MEDICAL_CHECKUP
+  TREATMENT
+  SURGERY
+  DENTAL_CARE
+  GROOMING
+  ALLERGY_TEST
+  MEDICATION
+  EMERGENCY_VISIT
+  BEHAVIORAL_CONSULTATION
+  NUTRITION_CONSULTATION
+  PARASITE_TREATMENT
+  OTHER
+}
+
+// ========== ENHANCED WALK MANAGEMENT ==========
+
+model Walk {
+  id                String   @id @default(cuid())
+  title             String
+  description       String?  @db.Text
+  startTime         DateTime
+  estimatedDuration Int // in minutes
+  actualDuration    Int? // actual duration in minutes
+
+  // Location Details
+  meetingPoint Json // { name: string, address: string, coordinates: { lat: number, lng: number }, instructions: string }
+  route        Json? // Array of waypoints for the walk route
+  distance     Float? // Estimated distance in km
+  difficulty   WalkDifficulty @default(EASY)
+  terrain      String[] // ["paved", "grass", "dirt", "hills"]
+
+  // Walk Configuration
+  walkType         WalkType
+  pace             WalkPace @default(MODERATE)
+  maxParticipants  Int?
+  minParticipants  Int?     @default(1)
+  allowsNewMembers Boolean  @default(true)
+
+  // Requirements & Restrictions
+  ageRestrictions     Json? // { minAge: number, maxAge: number }
+  breedRestrictions   String[] // Specific breeds not allowed
+  sizeRestrictions    String[] // ["small", "medium", "large"]
+  requiresVaccination Boolean         @default(false)
+  experienceRequired  ExperienceLevel @default(BEGINNER)
+
+  // Pricing & Commercial
+  cost            Float?    @default(0)
+  currency        String    @default("EUR")
+  paymentRequired Boolean   @default(false)
+  paymentDeadline DateTime?
+
+  // Weather & Conditions
+  weatherDependent Boolean  @default(false)
+  cancelConditions String[] // ["rain", "snow", "extreme_heat"]
+
+  // Social Features
+  allowsPhotos     Boolean @default(true)
+  allowsCheckins   Boolean @default(true)
+  isRecurring      Boolean @default(false)
+  recurringPattern Json? // { frequency: string, days: string[], endDate: DateTime }
+
+  // Status & Management
+  status              WalkStatus @default(SCHEDULED)
+  cancellationReason  String?
+  specialInstructions String?    @db.Text
+  equipmentNeeded     String[] // ["water_bowls", "first_aid", "bags"]
+
+  // Metadata
+  tags            String[] // Custom tags for categorization
+  isPublic        Boolean   @default(true)
+  allowsGuestPets Boolean   @default(false)
+  createdById     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  completedAt     DateTime?
+  cancelledAt     DateTime?
+
+  // Relations
+  creator      User                @relation("WalkCreator", fields: [createdById], references: [id])
+  participants WalkParticipation[]
+  posts        Post[]
+  photos       WalkPhoto[]
+  venue        Venue?              @relation(fields: [venueId], references: [id])
+
+  // Add venueId field
+  venueId String?
+
+  @@map("walks")
+}
+
+enum WalkType {
+  CASUAL
+  TRAINING
+  EXERCISE
+  SOCIAL
+  PUPPY_FRIENDLY
+  SENIOR_FRIENDLY
+  THERAPY_DOGS
+  BREED_SPECIFIC
+  SIZE_SPECIFIC
+  HIKING
+  BEACH_WALK
+  CITY_WALK
+  PARK_WALK
+  NIGHT_WALK
+}
+
+enum WalkDifficulty {
+  EASY
+  MODERATE
+  CHALLENGING
+  DIFFICULT
+}
+
+enum WalkPace {
+  SLOW
+  MODERATE
+  BRISK
+  FAST
+}
+
+enum WalkStatus {
+  DRAFT
+  SCHEDULED
+  RECRUITING
+  FULL
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+model WalkParticipation {
+  id               String                  @id @default(cuid())
+  walkId           String
+  userId           String
+  petId            String?
+  status           WalkParticipationStatus @default(PENDING)
+  joinedAt         DateTime                @default(now())
+  confirmedAt      DateTime?
+  completedAt      DateTime?
+  leftAt           DateTime?
+  checkedIn        Boolean                 @default(false)
+  checkedInAt      DateTime?
+  rating           Int? // 1-5 rating of the walk
+  review           String?
+  emergencyContact Json? // { name: string, phone: string }
+  specialRequests  String?
+  noShowReason     String?
+  notes            String? // Notes from organizer
+
+  // Relations
+  walk Walk @relation(fields: [walkId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pet  Pet? @relation(fields: [petId], references: [id])
+
+  @@unique([walkId, userId])
+  @@map("walk_participations")
+}
+
+enum WalkParticipationStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  WAITLISTED
+  COMPLETED
+  NO_SHOW
+  CANCELLED
+}
+
+model WalkPhoto {
+  id        String   @id @default(cuid())
+  walkId    String
+  userId    String
+  photoUrl  String
+  caption   String?
+  tagsUsers String[] // Array of user IDs tagged in photo
+  tagsPets  String[] // Array of pet IDs tagged in photo
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  walk Walk @relation(fields: [walkId], references: [id], onDelete: Cascade)
+
+  @@map("walk_photos")
+}
+
+// ========== SERVICE PROVIDER SYSTEM ==========
+
+model ServiceProviderProfile {
+  id              String      @id @default(cuid())
+  userId          String      @unique
+  businessName    String
+  businessType    ServiceType
+  specialties     String[] // Specific services offered
+  description     String      @db.Text
+  businessPhone   String
+  businessEmail   String?
+  businessAddress String
+  serviceArea     Json // Geographic area covered
+
+  // Credentials & Certifications
+  certifications  String[] // Array of certifications
+  licenses        String[] // Professional licenses
+  insurance       Boolean  @default(false)
+  yearsExperience Int?
+
+  // Business Details
+  openingHours       Json // Weekly schedule
+  pricing            Json // Service pricing information
+  acceptsEmergencies Boolean @default(false)
+  homeVisits         Boolean @default(false)
+
+  // Ratings & Reviews
+  averageRating Float @default(0)
+  totalReviews  Int   @default(0)
+
+  // Status
+  isVerified Boolean   @default(false)
+  verifiedAt DateTime?
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+  reviews  Review[]
+
+  @@map("service_provider_profiles")
+}
+
+enum ServiceType {
+  VETERINARIAN
+  EMERGENCY_VET
+  GROOMER
+  PET_SITTER
+  DOG_WALKER
+  TRAINER
+  BEHAVIORIST
+  PET_PHOTOGRAPHER
+  PET_TAXI
+  BOARDING
+  DAYCARE
+  PET_STORE
+  NUTRITIONIST
+  OTHER
+}
+
+// ========== BOOKING SYSTEM ==========
+
+model Booking {
+  id                 String        @id @default(cuid())
+  clientId           String
+  serviceProviderId  String
+  petId              String?
+  serviceType        ServiceType
+  appointmentDate    DateTime
+  duration           Int? // in minutes
+  location           String? // If home visit
+  specialRequests    String?       @db.Text
+  estimatedCost      Float?
+  actualCost         Float?
+  currency           String        @default("EUR")
+  status             BookingStatus @default(PENDING)
+  notes              String?       @db.Text
+  cancellationReason String?
+  rescheduledFrom    DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  confirmedAt        DateTime?
+  completedAt        DateTime?
+  cancelledAt        DateTime?
+
+  // Relations
+  client          User                   @relation(fields: [clientId], references: [id])
+  serviceProvider ServiceProviderProfile @relation(fields: [serviceProviderId], references: [id])
+  review          Review?
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+}
+
+model Review {
+  id                String    @id @default(cuid())
+  reviewerId        String
+  serviceProviderId String
+  bookingId         String?   @unique
+  rating            Int // 1-5 stars
+  title             String?
+  content           String    @db.Text
+  pros              String[] // Positive aspects
+  cons              String[] // Negative aspects
+  wouldRecommend    Boolean   @default(true)
+  serviceDate       DateTime
+  photos            String[] // Review photos
+  response          String? // Provider response
+  respondedAt       DateTime?
+  isVerified        Boolean   @default(false) // If booking confirmed
+  helpfulVotes      Int       @default(0)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  reviewer        User                   @relation(fields: [reviewerId], references: [id])
+  serviceProvider ServiceProviderProfile @relation(fields: [serviceProviderId], references: [id])
+  booking         Booking?               @relation(fields: [bookingId], references: [id])
+
+  @@map("reviews")
+}
+
+// ========== REST OF SCHEMA CONTINUES WITH IMPROVEMENTS ==========
+// (Events, Posts, Messages, Venues, etc. with similar enhancements)
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  description String    @db.Text
+  eventType   EventType
+  startTime   DateTime
+  endTime     DateTime?
+
+  // Location & Logistics
+  location         Json // Enhanced location with full address details
+  capacity         Int?
+  currentAttendees Int  @default(0)
+
+  // Pricing & Registration
+  fee                  Float?    @default(0)
+  currency             String    @default("EUR")
+  requiresRegistration Boolean   @default(true)
+  registrationDeadline DateTime?
+
+  // Event Details
+  ageRestrictions Json? // Pet and human age restrictions
+  equipmentNeeded String[]
+  tags            String[]
+  images          String[]
+
+  // Requirements
+  requiresVaccination  Boolean @default(false)
+  allowsChildren       Boolean @default(true)
+  wheelchairAccessible Boolean @default(false)
+
+  // Weather & Conditions
+  isOutdoor        Boolean @default(true)
+  weatherDependent Boolean @default(false)
+
+  // Recurring Events
+  isRecurring   Boolean @default(false)
+  recurringRule Json? // More detailed recurring patterns
+  parentEventId String? // For recurring event instances
+
+  // Status & Management
+  status             EventStatus @default(DRAFT)
+  isPublic           Boolean     @default(true)
+  isFeatured         Boolean     @default(false)
+  cancellationPolicy String?     @db.Text
+  refundPolicy       String?     @db.Text
+
+  // Social Features
+  allowsPhotos  Boolean @default(true)
+  allowsReviews Boolean @default(true)
+
+  // Metadata
+  createdById String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  cancelledAt DateTime?
+
+  // Relations
+  creator      User                 @relation("EventCreator", fields: [createdById], references: [id])
+  participants EventParticipation[]
+  posts        Post[]
+  parentEvent  Event?               @relation("EventSeries", fields: [parentEventId], references: [id])
+  childEvents  Event[]              @relation("EventSeries")
+  venue        Venue?               @relation(fields: [venueId], references: [id])
+
+  // Add venueId field
+  venueId String?
+
+  @@map("events")
+}
+
+enum EventType {
+  PICNIC
+  TRAINING_WORKSHOP
+  ADOPTION_FAIR
+  DOG_SHOW
+  COMPETITION
+  SOCIAL_GATHERING
+  FUNDRAISER
+  EDUCATIONAL_SEMINAR
+  HEALTH_CLINIC
+  GROOMING_DAY
+  PHOTO_SHOOT
+  CHARITY_WALK
+  AGILITY_TRAINING
+  PUPPY_SOCIALIZATION
+  SENIOR_PET_MEETUP
+  BREED_MEETUP
+  HOLIDAY_CELEBRATION
+  MEMORIAL_SERVICE
+  PROTEST_RALLY
+  OTHER
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  ACTIVE
+  FULL
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+model EventParticipation {
+  id           String                   @id @default(cuid())
+  eventId      String
+  userId       String
+  petId        String? // If bringing a pet
+  status       EventParticipationStatus @default(REGISTERED)
+  registeredAt DateTime                 @default(now())
+  confirmedAt  DateTime?
+  checkedInAt  DateTime?
+  checkedOutAt DateTime?
+
+  // Payment & Registration
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentAmount Float?
+  paymentDate   DateTime?
+  paymentMethod String?
+  refundAmount  Float?
+  refundDate    DateTime?
+
+  // Participation Details
+  specialRequests  String?   @db.Text
+  dietaryNeeds     String[] // For events with food
+  emergencyContact Json? // { name: string, phone: string }
+  waiverSigned     Boolean   @default(false)
+  waiverSignedAt   DateTime?
+
+  // Feedback & Experience
+  rating       Int? // 1-5 rating of the event
+  review       String?  @db.Text
+  photos       String[] // Photos taken during event
+  certificates String[] // Certificates earned (for training events)
+
+  // No-Show & Cancellation
+  noShowReason       String?
+  cancellationReason String?
+  cancelledAt        DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pet   Pet?  @relation(fields: [petId], references: [id])
+
+  @@unique([eventId, userId])
+  @@map("event_participations")
+}
+
+enum EventParticipationStatus {
+  REGISTERED
+  CONFIRMED
+  WAITLISTED
+  CANCELLED
+  ATTENDED
+  NO_SHOW
+  COMPLETED_WITH_CERTIFICATE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  WAIVED
+}
+
+// ========== ENHANCED SOCIAL FEATURES ==========
+
+model Post {
+  id      String @id @default(cuid())
+  content String @db.Text
+
+  // Media Content
+  images     String[] // Array of image URLs
+  videos     String[] // Array of video URLs
+  documents  String[] // PDFs, documents
+  audioFiles String[] // Audio recordings
+  thumbnails String[] // Thumbnails for videos
+
+  // Post Classification
+  postType PostType
+  category PostCategory?
+  hashtags String[]
+  mentions String[] // Array of user IDs mentioned
+
+  // Visibility & Reach
+  visibility     PostVisibility @default(NEIGHBORHOOD)
+  targetAudience Json? // { ageGroups: string[], experienceLevels: string[], petTypes: string[] }
+
+  // Location & Context
+  location Json? // { name: string, coordinates: {lat, lng}, address: string }
+  walkId   String? // if related to a walk
+  eventId  String? // if related to an event
+  petId    String? // if specifically about one pet
+
+  // Engagement & Moderation
+  isPinned    Boolean @default(false)
+  isFeatured  Boolean @default(false)
+  isSponsored Boolean @default(false)
+  sponsorInfo Json? // Sponsor details if sponsored
+
+  // Content Management
+  isEdited         Boolean          @default(false)
+  editHistory      Json[] // Array of edit timestamps and reasons
+  moderationStatus ModerationStatus @default(APPROVED)
+  moderatedAt      DateTime?
+  moderatedBy      String?
+  moderationNotes  String?
+
+  // Alerts & Special Posts
+  isUrgent   Boolean   @default(false) // For lost pets, emergencies
+  expiresAt  DateTime? // For temporary posts like lost pet alerts
+  isResolved Boolean   @default(false) // For lost pets found, questions answered
+  resolvedAt DateTime?
+
+  // Statistics
+  viewCount  Int @default(0)
+  shareCount Int @default(0)
+  saveCount  Int @default(0)
+
+  // SEO & Discovery
+  title   String?
+  excerpt String? // Short summary for feeds
+  tags    String[] // Additional tags for search
+
+  authorId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  deletedAt   DateTime? // Soft delete
+
+  // Relations
+  author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  walk     Walk?       @relation(fields: [walkId], references: [id])
+  event    Event?      @relation(fields: [eventId], references: [id])
+  pet      Pet?        @relation(fields: [petId], references: [id])
+  comments Comment[]
+  likes    Like[]
+  shares   PostShare[]
+  saves    PostSave[]
+  reports  Report[]
+
+  @@map("posts")
+}
+
+enum PostType {
+  TEXT
+  PHOTO
+  VIDEO
+  POLL
+  QUESTION
+  TIP_ADVICE
+  ALERT_LOST
+  ALERT_FOUND
+  ANNOUNCEMENT
+  REVIEW
+  STORY
+  LIVE_UPDATE
+  MEMORIAL
+  ADOPTION_POST
+  SERVICE_RECOMMENDATION
+  EVENT_RECAP
+}
+
+enum PostCategory {
+  HEALTH_MEDICAL
+  TRAINING_BEHAVIOR
+  NUTRITION_DIET
+  GROOMING_CARE
+  EXERCISE_ACTIVITY
+  SOCIAL_MEETUPS
+  EMERGENCY_SAFETY
+  PRODUCT_REVIEW
+  SERVICE_REVIEW
+  COMMUNITY_NEWS
+  FUNNY_CUTE
+  EDUCATIONAL
+  LOST_FOUND
+  ADOPTION
+  MEMORIAL
+}
+
+enum PostVisibility {
+  PUBLIC
+  NEIGHBORHOOD
+  FRIENDS_ONLY
+  FOLLOWERS_ONLY
+  PRIVATE
+  MEMBERS_ONLY
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FLAGGED
+  UNDER_REVIEW
+  ARCHIVED
+}
+
+model PostShare {
+  id        String    @id @default(cuid())
+  postId    String
+  userId    String
+  shareType ShareType @default(REPOST)
+  message   String? // Optional message when sharing
+  platform  String? // If shared to external platform
+  createdAt DateTime  @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@map("post_shares")
+}
+
+enum ShareType {
+  REPOST
+  QUOTE_REPOST
+  EXTERNAL_SHARE
+  DIRECT_MESSAGE
+}
+
+model PostSave {
+  id         String   @id @default(cuid())
+  postId     String
+  userId     String
+  collection String?  @default("default") // User-defined collections
+  notes      String? // Personal notes about why saved
+  createdAt  DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@map("post_saves")
+}
+
+model Comment {
+  id      String @id @default(cuid())
+  content String @db.Text
+
+  // Media in Comments
+  images String[] // Images in comment
+  videos String[] // Videos in comment
+
+  // Comment Structure
+  postId      String
+  authorId    String
+  parentId    String? // for nested comments
+  threadLevel Int     @default(0) // nesting level
+
+  // Engagement
+  mentions    String[] // Array of user IDs mentioned
+  isEdited    Boolean  @default(false)
+  editHistory Json[] // Edit history
+
+  // Moderation
+  moderationStatus ModerationStatus @default(APPROVED)
+  moderatedAt      DateTime?
+  moderatedBy      String?
+
+  // Status
+  isHighlighted Boolean @default(false) // Highlighted by post author
+  isPinned      Boolean @default(false) // Pinned comment
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Soft delete
+
+  // Relations
+  post    Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author  User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
+  likes   Like[]
+
+  @@map("comments")
+}
+
+model Like {
+  id           String       @id @default(cuid())
+  userId       String
+  postId       String?
+  commentId    String?
+  reactionType ReactionType @default(LIKE)
+  createdAt    DateTime     @default(now())
+
+  // Relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+  @@map("likes")
+}
+
+enum ReactionType {
+  LIKE
+  LOVE
+  PAW
+  HEART
+  LAUGH
+  WOW
+  SAD
+  ANGRY
+  HELPFUL
+  BRILLIANT
+}
+
+// ========== ENHANCED MESSAGING SYSTEM ==========
+
+model Conversation {
+  id          String  @id @default(cuid())
+  name        String? // for group conversations
+  description String? // Group description
+  avatar      String? // Group avatar
+
+  // Conversation Type & Settings
+  isGroup         Boolean @default(false)
+  isPublic        Boolean @default(false) // Public groups
+  maxParticipants Int?    @default(50)
+
+  // Group Management
+  requiresApproval Boolean @default(false) // For joining
+  allowsInvites    Boolean @default(true)
+
+  // Privacy & Security
+  isEncrypted     Boolean @default(false)
+  autoDeleteAfter Int? // Days after which messages auto-delete
+
+  // Activity & Status
+  lastMessageAt DateTime?
+  isArchived    Boolean   @default(false)
+  isMuted       Boolean   @default(false)
+
+  // Metadata
+  tags     String[] // Tags for organization
+  category ConversationCategory?
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  archivedAt DateTime?
+
+  // Relations
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+enum ConversationCategory {
+  GENERAL
+  NEIGHBORHOOD
+  BREED_SPECIFIC
+  WALK_GROUP
+  EVENT_PLANNING
+  HEALTH_SUPPORT
+  TRAINING_TIPS
+  EMERGENCY
+  ANNOUNCEMENTS
+  MARKETPLACE
+}
+
+model ConversationParticipant {
+  id             String @id @default(cuid())
+  conversationId String
+  userId         String
+
+  // Participation Status
+  role   ParticipantRole   @default(MEMBER)
+  status ParticipantStatus @default(ACTIVE)
+
+  // Permissions
+  canAddMembers     Boolean @default(false)
+  canRemoveMembers  Boolean @default(false)
+  canEditGroup      Boolean @default(false)
+  canDeleteMessages Boolean @default(false)
+
+  // Activity Tracking
+  joinedAt     DateTime  @default(now())
+  leftAt       DateTime?
+  lastReadAt   DateTime?
+  lastActiveAt DateTime?
+
+  // Settings
+  notificationsEnabled Boolean   @default(true)
+  isMuted              Boolean   @default(false)
+  mutedUntil           DateTime?
+
+  // Statistics
+  messageCount Int @default(0)
+
+  invitedBy  String? // User ID who invited this participant
+  invitedAt  DateTime?
+  kickedBy   String? // If removed by admin
+  kickedAt   DateTime?
+  kickReason String?
+
+  // Relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+enum ParticipantRole {
+  OWNER
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
+enum ParticipantStatus {
+  ACTIVE
+  INVITED
+  BANNED
+  LEFT
+}
+
+model Message {
+  id      String  @id @default(cuid())
+  content String? @db.Text // Null for media-only messages
+
+  // Message Types & Content
+  messageType MessageType @default(TEXT)
+  attachments String[] // URLs to files/images/videos
+  thumbnails  String[] // Thumbnails for media
+
+  // Rich Content
+  mentions      String[] // Array of user IDs mentioned
+  replyToId     String? // If replying to specific message
+  forwardedFrom String? // Original message ID if forwarded
+
+  // Location & Context
+  location Json? // Shared location
+  walkId   String? // If sharing a walk
+  eventId  String? // If sharing an event
+  petId    String? // If sharing pet info
+
+  // Message Status
+  conversationId String
+  senderId       String
+  receiverId     String? // for direct messages
+
+  // Delivery & Read Status
+  deliveredAt DateTime?
+  readBy      Json? // Array of {userId, readAt} objects
+
+  // Message Management
+  isEdited   Boolean    @default(false)
+  editedAt   DateTime?
+  isDeleted  Boolean    @default(false)
+  deletedAt  DateTime?
+  deletedBy  String? // Who deleted the message
+  deleteType DeleteType @default(FOR_ME) // How was it deleted
+
+  // Priority & Urgency
+  priority  MessagePriority @default(NORMAL)
+  isUrgent  Boolean         @default(false)
+  expiresAt DateTime? // For disappearing messages
+
+  // Reactions & Engagement
+  reactions Json? // Array of {userId, reaction, timestamp}
+  isPinned  Boolean   @default(false)
+  pinnedBy  String?
+  pinnedAt  DateTime?
+
+  // System Messages
+  systemAction SystemAction?
+  systemData   Json? // Additional data for system messages
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation("MessageSender", fields: [senderId], references: [id])
+  receiver     User?        @relation("MessageReceiver", fields: [receiverId], references: [id])
+  replyTo      Message?     @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies      Message[]    @relation("MessageReplies")
+
+  @@map("messages")
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+  LOCATION
+  CONTACT
+  POLL
+  SYSTEM
+  WALK_SHARE
+  EVENT_SHARE
+  PET_PROFILE_SHARE
+  STICKER
+  GIF
+}
+
+enum DeleteType {
+  FOR_ME
+  FOR_EVERYONE
+}
+
+enum MessagePriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum SystemAction {
+  USER_JOINED
+  USER_LEFT
+  USER_ADDED
+  USER_REMOVED
+  CONVERSATION_CREATED
+  NAME_CHANGED
+  AVATAR_CHANGED
+  ADMIN_PROMOTED
+  ADMIN_DEMOTED
+  SETTINGS_CHANGED
+}
+
+// ========== ENHANCED VENUE MANAGEMENT ==========
+
+model Venue {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String?   @unique // URL-friendly name
+  venueType   VenueType
+  subCategory String? // More specific category
+
+  // Location Details
+  address      String
+  city         String
+  zipCode      String
+  coordinates  Json // { lat: number, lng: number }
+  neighborhood String?
+  landmarks    String[] // Nearby landmarks
+
+  // Contact Information
+  phoneNumber    String?
+  alternatePhone String?
+  email          String?
+  website        String?
+  socialMedia    Json? // { facebook: string, instagram: string, etc. }
+
+  // Business Details
+  description String?  @db.Text
+  amenities   String[] // Array of amenities
+  services    String[] // Services offered
+  specialties String[] // Special services or focus areas
+
+  // Operating Information
+  openingHours        Json? // Weekly schedule with holidays
+  seasonalHours       Json? // Different hours by season
+  isTemporarilyClosed Boolean   @default(false)
+  closureReason       String?
+  reopenDate          DateTime?
+
+  // Pricing & Policies
+  priceRange      PriceRange?
+  acceptsCards    Boolean     @default(true)
+  acceptsCash     Boolean     @default(true)
+  parkingInfo     String?
+  petsAllowed     Boolean     @default(true)
+  petRestrictions String[] // Size, breed restrictions
+
+  // Accessibility & Features
+  wheelchairAccessible Boolean @default(false)
+  hasParking           Boolean @default(false)
+  hasWifi              Boolean @default(false)
+  hasOutdoorSpace      Boolean @default(false)
+  allowsPhotos         Boolean @default(true)
+
+  // Media & Visual
+  photos      String[] // Array of image URLs
+  videos      String[] // Promotional videos
+  virtualTour String? // 360° tour URL
+  logo        String? // Business logo
+  coverPhoto  String? // Main photo
+
+  // Ratings & Reviews
+  averageRating   Float @default(0)
+  totalReviews    Int   @default(0)
+  ratingBreakdown Json? // {1: count, 2: count, ...}
+
+  // Business Status
+  isVerified  Boolean   @default(false)
+  verifiedAt  DateTime?
+  isActive    Boolean   @default(true)
+  isFeatured  Boolean   @default(false)
+  isSponsored Boolean   @default(false)
+
+  // SEO & Discovery
+  tags     String[] // Search tags
+  keywords String[] // SEO keywords
+
+  // Ownership & Management
+  ownerId   String? // If claimed by a user
+  managedBy String[] // Array of manager user IDs
+  claimCode String? // Code for claiming venue
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  owner   User?         @relation("VenueOwner", fields: [ownerId], references: [id])
+  reviews VenueReview[]
+  events  Event[] // Events held at this venue
+  walks   Walk[] // Walks starting from this venue
+
+  @@map("venues")
+}
+
+enum VenueType {
+  DOG_PARK
+  CAT_CAFE
+  VETERINARIAN
+  EMERGENCY_VET
+  SPECIALIST_VET
+  PET_STORE
+  GROOMER
+  BOARDING
+  DAYCARE
+  TRAINING_CENTER
+  DOG_RUN
+  BEACH_DOG_AREA
+  HIKING_TRAIL
+  PET_FRIENDLY_RESTAURANT
+  PET_FRIENDLY_CAFE
+  PET_FRIENDLY_HOTEL
+  PHARMACY_PET
+  PET_PHOTOGRAPHER
+  PET_TAXI
+  ANIMAL_SHELTER
+  RESCUE_ORGANIZATION
+  BREEDING_FACILITY
+  DOG_WALKER_SERVICE
+  PET_SITTER_SERVICE
+  MOBILE_VET
+  MOBILE_GROOMER
+  PET_WASTE_STATION
+  WATER_FOUNTAIN_PET
+  OTHER
+}
+
+enum PriceRange {
+  FREE
+  BUDGET // $
+  MODERATE // $
+  EXPENSIVE // $$
+  LUXURY // $$
+}
+
+model VenueReview {
+  id      String @id @default(cuid())
+  venueId String
+  userId  String
+
+  // Review Content
+  rating Int // 1-5 stars
+  title  String?
+  review String?  @db.Text
+  pros   String[] // Positive aspects
+  cons   String[] // Negative aspects
+
+  // Detailed Ratings
+  serviceRating     Int? // 1-5 for service quality
+  valueRating       Int? // 1-5 for value for money
+  cleanlinessRating Int? // 1-5 for cleanliness
+  locationRating    Int? // 1-5 for location/accessibility
+
+  // Context & Details
+  visitDate   DateTime? // When they visited
+  visitReason String? // Why they visited
+  serviceUsed String? // Specific service used
+  petType     String? // What pet they brought
+  groupSize   Int? // How many people/pets
+
+  // Media & Evidence
+  photos   String[] // Review photos
+  videos   String[] // Review videos
+  receipts String[] // Receipt photos for verification
+
+  // Recommendations
+  wouldRecommend Boolean  @default(true)
+  recommendedFor String[] // ["families", "senior_pets", "puppies"]
+  bestTime       String? // Best time to visit
+  tips           String[] // Tips for other visitors
+
+  // Review Management
+  isVerified      Boolean   @default(false) // Verified visit
+  isEdited        Boolean   @default(false)
+  editedAt        DateTime?
+  flaggedCount    Int       @default(0)
+  helpfulVotes    Int       @default(0)
+  notHelpfulVotes Int       @default(0)
+
+  // Business Response
+  businessResponse String?   @db.Text
+  respondedAt      DateTime?
+  respondedBy      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([venueId, userId])
+  @@map("venue_reviews")
+}
+
+// ========== ENHANCED GAMIFICATION ==========
+
+model Badge {
+  id               String  @id @default(cuid())
+  name             String  @unique
+  slug             String  @unique // URL-friendly name
+  description      String  @db.Text
+  shortDescription String? // Brief description for UI
+
+  // Visual Design
+  icon      String // Badge icon/image URL
+  color     String  @default("#3B82F6") // Hex color
+  animation String? // Animation type for unlocking
+
+  // Badge Properties
+  category   BadgeCategory
+  rarity     BadgeRarity     @default(COMMON)
+  difficulty BadgeDifficulty @default(EASY)
+
+  // Requirements & Logic
+  criteria      Json // Detailed unlock conditions
+  prerequisites String[] // Array of badge IDs required first
+  isSecret      Boolean  @default(false) // Hidden until unlocked
+
+  // Rewards & Benefits
+  points  Int      @default(0)
+  unlocks String[] // Features or content unlocked
+  perks   Json? // Special perks for having this badge
+
+  // Progress Tracking
+  hasProgress  Boolean @default(false) // Can show progress
+  maxProgress  Int? // Total progress needed
+  progressUnit String? // Unit of measurement
+
+  // Timing & Availability
+  isActive  Boolean   @default(true)
+  startDate DateTime?
+  endDate   DateTime? // Limited time badges
+
+  // Statistics
+  totalAwarded  Int @default(0)
+  uniqueHolders Int @default(0)
+
+  // Metadata
+  tags String[] // Tags for categorization
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userBadges UserBadge[]
+
+  @@map("badges")
+}
+
+enum BadgeCategory {
+  SOCIAL
+  ACTIVITY
+  COMMUNITY
+  MILESTONE
+  SPECIAL
+  PROFILE
+  LEADERSHIP
+  ENGAGEMENT
+  HEALTH_TRACKING
+  TRAINING
+  EVENTS
+  WALKS
+  PHOTOGRAPHY
+  HELPFULNESS
+  EXPLORATION
+  SEASONAL
+  ANNIVERSARY
+}
+
+enum BadgeRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+  MYTHIC
+}
+
+enum BadgeDifficulty {
+  EASY
+  MODERATE
+  HARD
+  EXPERT
+  MASTER
+}
+
+model UserBadge {
+  id      String @id @default(cuid())
+  userId  String
+  badgeId String
+
+  // Achievement Details
+  earnedAt DateTime @default(now())
+  earnedBy String? // How it was earned (system event)
+
+  // Progress Tracking
+  progress       Json? // Current progress towards badge
+  completedSteps String[] // Which requirements completed
+
+  // Display & Status
+  isDisplayed  Boolean @default(true) // Show on profile
+  isFavorite   Boolean @default(false) // Favorite badge
+  displayOrder Int? // Order on profile
+
+  // Achievement Context
+  relatedContent Json? // Related walk, event, post that triggered
+  witnessedBy    String[] // Other users who were present
+  location       String? // Where it was earned
+
+  // Notifications
+  notificationSent  Boolean @default(false)
+  celebrationViewed Boolean @default(false)
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+  @@map("user_badges")
+}
+
+// ========== ENHANCED NOTIFICATION SYSTEM ==========
+
+model Notification {
+  id     String @id @default(cuid())
+  userId String
+
+  // Notification Content
+  type         NotificationType
+  title        String
+  message      String           @db.Text
+  shortMessage String? // For mobile/SMS
+
+  // Rich Content
+  icon  String?
+  image String? // Notification image
+  color String? // Theme color
+
+  // Action & Navigation
+  actionUrl   String? // URL to navigate when clicked
+  actionLabel String? // Button text
+  deepLink    String? // Mobile deep link
+
+  // Context & Data
+  data              Json? // Additional data specific to notification type
+  relatedEntityId   String? // ID of related object (post, walk, etc.)
+  relatedEntityType String? // Type of related object
+
+  // Targeting & Personalization
+  tags     String[] // Tags for filtering
+  priority NotificationPriority @default(NORMAL)
+  category NotificationCategory
+
+  // Delivery & Status
+  isRead         Boolean   @default(false)
+  readAt         DateTime?
+  deliveryMethod String[] // ["push", "email", "sms"]
+  deliveredAt    DateTime?
+  failedDelivery Boolean   @default(false)
+  failureReason  String?
+
+  // Scheduling
+  scheduledFor DateTime? // For scheduled notifications
+  expiresAt    DateTime? // When notification expires
+
+  // Interaction
+  clickedAt   DateTime?
+  dismissedAt DateTime?
+
+  // Grouping
+  groupKey String? // For grouping similar notifications
+  batchId  String? // For batch notifications
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  // Social Interactions
+  FRIEND_REQUEST
+  FRIEND_REQUEST_ACCEPTED
+  POST_LIKE
+  POST_COMMENT
+  COMMENT_REPLY
+  MENTION
+  MESSAGE_RECEIVED
+
+  // Walk & Event Notifications
+  WALK_INVITATION
+  WALK_REQUEST_APPROVED
+  WALK_CANCELLED
+  WALK_REMINDER
+  WALK_STARTING_SOON
+  WALK_COMPLETED
+  EVENT_INVITATION
+  EVENT_REMINDER
+  EVENT_CANCELLED
+  EVENT_STARTING_SOON
+
+  // Pet Health & Care
+  HEALTH_REMINDER
+  VACCINATION_DUE
+  VET_APPOINTMENT_REMINDER
+  MEDICATION_REMINDER
+
+  // Community & Engagement
+  BADGE_EARNED
+  LEVEL_UP
+  WEEKLY_SUMMARY
+  MONTHLY_REPORT
+  NEW_MEMBER_NEIGHBORHOOD
+  TRENDING_POST
+
+  // System & Administrative
+  SYSTEM_ANNOUNCEMENT
+  ACCOUNT_SECURITY
+  PASSWORD_CHANGED
+  EMAIL_VERIFIED
+  PROFILE_APPROVED
+  CONTENT_FLAGGED
+  CONTENT_APPROVED
+
+  // Service & Booking
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  BOOKING_REMINDER
+  PAYMENT_RECEIVED
+  PAYMENT_FAILED
+
+  // Emergency & Safety
+  LOST_PET_ALERT
+  FOUND_PET_MATCH
+  EMERGENCY_ALERT
+  WEATHER_WARNING
+
+  // Marketing & Engagement
+  WELCOME_SERIES
+  FEATURE_ANNOUNCEMENT
+  SURVEY_INVITATION
+  REFERRAL_REWARD
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+}
+
+enum NotificationCategory {
+  SOCIAL
+  ACTIVITY
+  HEALTH
+  SYSTEM
+  MARKETING
+  EMERGENCY
+  TRANSACTIONAL
+}
+
+// ========== ENHANCED MODERATION ==========
+
+model Report {
+  id             String  @id @default(cuid())
+  reportedById   String
+  reportedUserId String?
+
+  // Content Being Reported
+  contentType     ContentType
+  contentId       String
+  contentUrl      String? // Direct link to content
+  contentSnapshot Json? // Snapshot of content at time of report
+
+  // Report Details
+  reason      ReportReason
+  category    ReportCategory?
+  description String?         @db.Text
+  evidence    String[] // Screenshots, links, etc.
+
+  // Severity & Impact
+  severity      ReportSeverity @default(MEDIUM)
+  isUrgent      Boolean        @default(false)
+  affectedUsers String[] // Other users affected
+
+  // Processing & Review
+  status       ReportStatus @default(PENDING)
+  reviewedById String?
+  reviewedAt   DateTime?
+  reviewNotes  String?      @db.Text
+
+  // Resolution
+  actionTaken     String?           @db.Text
+  resolution      ReportResolution?
+  resolutionNotes String?           @db.Text
+  escalatedTo     String? // If escalated to higher authority
+
+  // Follow-up
+  followUpRequired Boolean   @default(false)
+  followUpDate     DateTime?
+  appealable       Boolean   @default(true)
+  appealDeadline   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  reportedBy   User  @relation("ReportedBy", fields: [reportedById], references: [id])
+  reportedUser User? @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  post         Post? @relation(fields: [postId], references: [id])
+
+  // Add postId field for relation
+  postId String?
+
+  @@map("reports")
+}
+
+enum ContentType {
+  USER_PROFILE
+  PET_PROFILE
+  POST
+  COMMENT
+  MESSAGE
+  PHOTO
+  VIDEO
+  REVIEW
+  WALK
+  EVENT
+  VENUE
+  CONVERSATION
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  HATE_SPEECH
+  VIOLENCE
+  INAPPROPRIATE_CONTENT
+  MISINFORMATION
+  COPYRIGHT_VIOLATION
+  FRAUD_SCAM
+  ANIMAL_ABUSE
+  ILLEGAL_ACTIVITY
+  PRIVACY_VIOLATION
+  FAKE_PROFILE
+  UNDERAGE_USER
+  OTHER
+}
+
+enum ReportCategory {
+  CONTENT_VIOLATION
+  USER_BEHAVIOR
+  TECHNICAL_ISSUE
+  SAFETY_CONCERN
+  LEGAL_ISSUE
+  COMMUNITY_GUIDELINES
+}
+
+enum ReportSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+  EMERGENCY
+}
+
+enum ReportStatus {
+  PENDING
+  UNDER_REVIEW
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+  ESCALATED
+  APPEALED
+  CLOSED
+}
+
+enum ReportResolution {
+  NO_ACTION_NEEDED
+  WARNING_ISSUED
+  CONTENT_REMOVED
+  CONTENT_EDITED
+  USER_SUSPENDED
+  USER_BANNED
+  ACCOUNT_RESTRICTED
+  EDUCATIONAL_NOTICE
+  COMMUNITY_SERVICE
+  REFERRED_TO_AUTHORITIES
+}
+
+// ========== ANALYTICS & INSIGHTS ==========
+
+model UserActivity {
+  id           String       @id @default(cuid())
+  userId       String
+  activityType ActivityType
+  activityData Json // Specific data for each activity type
+  sessionId    String? // Session tracking
+  deviceInfo   Json? // Device and browser info
+  location     Json? // User's location when activity occurred
+  ipAddress    String?
+  userAgent    String?
+  referrer     String? // Where they came from
+  duration     Int? // Duration in seconds for time-based activities
+  metadata     Json? // Additional tracking data
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_activities")
+}
+
+enum ActivityType {
+  // Authentication & Account
+  LOGIN
+  LOGOUT
+  REGISTRATION
+  PASSWORD_CHANGE
+  EMAIL_VERIFICATION
+  PROFILE_UPDATE
+
+  // Social Activities
+  FRIEND_REQUEST_SENT
+  FRIEND_REQUEST_ACCEPTED
+  MESSAGE_SENT
+  POST_CREATED
+  POST_LIKED
+  POST_SHARED
+  COMMENT_POSTED
+
+  // Pet & Care Activities
+  PET_ADDED
+  PET_UPDATED
+  HEALTH_RECORD_ADDED
+  VET_APPOINTMENT_BOOKED
+
+  // Walk & Event Activities
+  WALK_CREATED
+  WALK_JOINED
+  WALK_COMPLETED
+  EVENT_CREATED
+  EVENT_ATTENDED
+
+  // Engagement Activities
+  VENUE_REVIEWED
+  BADGE_EARNED
+  SEARCH_PERFORMED
+  CONTENT_VIEWED
+  APP_OPENED
+  FEATURE_USED
+
+  // Community Activities
+  REPORT_SUBMITTED
+  HELP_REQUEST
+  FEEDBACK_PROVIDED
+}
+
+// ========== ENHANCED LOCATION & GEOFENCING ==========
+
+model LocationHistory {
+  id           String  @id @default(cuid())
+  userId       String
+  coordinates  Json // { lat: number, lng: number, accuracy: number }
+  address      String?
+  neighborhood String?
+  city         String?
+  country      String?
+  activityType String? // What user was doing at this location
+  accuracy     Float? // GPS accuracy in meters
+  speed        Float? // Speed if moving (km/h)
+  heading      Float? // Direction of movement
+  altitude     Float? // Altitude in meters
+
+  // Context
+  isManualEntry Boolean        @default(false)
+  source        LocationSource @default(GPS)
+  purpose       String? // Why location was recorded
+
+  // Privacy
+  isPrivate  Boolean  @default(true)
+  sharedWith String[] // User IDs who can see this location
+
+  createdAt DateTime  @default(now())
+  expiresAt DateTime? // When to auto-delete for privacy
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("location_history")
+}
+
+enum LocationSource {
+  GPS
+  NETWORK
+  MANUAL
+  CHECK_IN
+  WALK_START
+  WALK_END
+  EVENT_ATTENDANCE
+}
+
+model Geofence {
+  id          String  @id @default(cuid())
+  name        String
+  description String? @db.Text
+  createdById String
+
+  // Geographic Boundaries
+  centerPoint Json // { lat: number, lng: number }
+  radius      Float // Radius in meters
+  boundary    Json? // Polygon coordinates for complex shapes
+
+  // Geofence Settings
+  isActive       Boolean @default(true)
+  triggerOnEnter Boolean @default(true)
+  triggerOnExit  Boolean @default(false)
+  triggerOnDwell Boolean @default(false)
+  dwellTime      Int? // Minimum time in seconds to trigger dwell
+
+  // Notification Settings
+  notifyUsers         String[] // User IDs to notify
+  notificationMessage String?
+  alertType           AlertType @default(INFO)
+
+  // Usage Context
+  purpose           GeofencePurpose
+  relatedEntityId   String? // ID of walk, event, venue, etc.
+  relatedEntityType String?
+
+  // Scheduling
+  activeFrom  DateTime?
+  activeTo    DateTime?
+  activeDays  String[] // Days of week when active
+  activeHours Json? // Hour ranges when active
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator  User            @relation(fields: [createdById], references: [id])
+  triggers GeofenceEvent[]
+
+  @@map("geofences")
+}
+
+enum GeofencePurpose {
+  WALK_REMINDER
+  EVENT_REMINDER
+  SAFETY_ALERT
+  VENUE_PROMOTION
+  LOST_PET_ALERT
+  NEIGHBORHOOD_NOTIFICATION
+  TRAINING_ZONE
+  RESTRICTED_AREA
+  EMERGENCY_ZONE
+}
+
+enum AlertType {
+  INFO
+  WARNING
+  EMERGENCY
+  PROMOTION
+  REMINDER
+}
+
+model GeofenceEvent {
+  id         String            @id @default(cuid())
+  geofenceId String
+  userId     String
+  eventType  GeofenceEventType
+  location   Json // User's location when triggered
+  accuracy   Float? // GPS accuracy
+  dwellTime  Int? // Time spent in geofence (seconds)
+  metadata   Json? // Additional event data
+
+  triggeredAt DateTime @default(now())
+
+  // Relations
+  geofence Geofence @relation(fields: [geofenceId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("geofence_events")
+}
+
+enum GeofenceEventType {
+  ENTER
+  EXIT
+  DWELL
+}
+
+// ========== ENHANCED CONTENT MANAGEMENT ==========
+
+model ContentModeration {
+  id             String         @id @default(cuid())
+  contentType    ContentType
+  contentId      String
+  moderationType ModerationType
+
+  // AI/Automated Analysis
+  aiConfidence     Float? // AI confidence score 0-1
+  aiFlags          String[] // What AI detected
+  aiRecommendation ModerationAction
+
+  // Human Review
+  reviewedById  String?
+  humanDecision ModerationAction?
+  reviewNotes   String?           @db.Text
+  reviewTime    Int? // Time spent reviewing (seconds)
+
+  // Content Analysis
+  sentimentScore   Float? // -1 to 1 sentiment analysis
+  toxicityScore    Float? // 0-1 toxicity score
+  languageDetected String?
+  explicitContent  Boolean @default(false)
+  minorSafety      Boolean @default(true)
+
+  // Decision & Actions
+  finalDecision ModerationAction
+  actionTaken   String[] // Array of actions taken
+  reasonCodes   String[] // Violation reason codes
+
+  // Appeal Process
+  appealable     Boolean           @default(true)
+  appealed       Boolean           @default(false)
+  appealedAt     DateTime?
+  appealDecision ModerationAction?
+  appealNotes    String?           @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  decidedAt DateTime?
+
+  // Relations
+  reviewer User? @relation(fields: [reviewedById], references: [id])
+
+  @@unique([contentType, contentId])
+  @@map("content_moderation")
+}
+
+enum ModerationType {
+  AUTOMATED
+  REPORTED
+  RANDOM_SAMPLE
+  ESCALATED
+  APPEAL_REVIEW
+  BULK_ACTION
+}
+
+enum ModerationAction {
+  APPROVE
+  REJECT
+  REQUIRE_EDIT
+  ADD_WARNING
+  RESTRICT_VISIBILITY
+  REMOVE_CONTENT
+  SUSPEND_USER
+  BAN_USER
+  ESCALATE
+  NEEDS_HUMAN_REVIEW
+}
+
+// ========== SEARCH & DISCOVERY ==========
+
+model SearchQuery {
+  id        String     @id @default(cuid())
+  userId    String?
+  query     String
+  queryType SearchType
+  filters   Json? // Applied filters
+  location  Json? // User's location during search
+
+  // Results & Interaction
+  resultCount       Int      @default(0)
+  clickedResults    String[] // IDs of results clicked
+  bookmarkedResults String[] // Results saved/bookmarked
+
+  // Context
+  source     String? // Where search was initiated
+  sessionId  String?
+  deviceType String?
+
+  // Performance
+  responseTime Int? // Response time in ms
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("search_queries")
+}
+
+enum SearchType {
+  GENERAL
+  USERS
+  PETS
+  WALKS
+  EVENTS
+  VENUES
+  POSTS
+  SERVICES
+  HEALTH_INFO
+  TRAINING_TIPS
+}
+
+// ========== SUBSCRIPTION & PREMIUM FEATURES ==========
+
+model Subscription {
+  id       String             @id @default(cuid())
+  userId   String             @unique
+  planType SubscriptionPlan
+  status   SubscriptionStatus @default(ACTIVE)
+
+  // Billing
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean   @default(false)
+  cancelledAt        DateTime?
+  cancelReason       String?
+
+  // Payment
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  paymentMethodId      String?
+  currency             String  @default("EUR")
+  amount               Float
+
+  // Usage & Limits
+  usageData  Json? // Track feature usage
+  limitsData Json? // Current limits for plan
+
+  // Trial & Discounts
+  trialStart     DateTime?
+  trialEnd       DateTime?
+  isTrialing     Boolean   @default(false)
+  discountCode   String?
+  discountAmount Float?    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+
+  @@map("subscriptions")
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PREMIUM
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  UNPAID
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  subscriptionId String
+  invoiceNumber  String        @unique
+  amount         Float
+  currency       String        @default("EUR")
+  status         InvoiceStatus @default(PENDING)
+
+  // Dates
+  invoiceDate DateTime
+  dueDate     DateTime
+  paidAt      DateTime?
+
+  // Payment Details
+  paymentIntentId String?
+  paymentMethodId String?
+
+  // Line Items
+  lineItems Json // Array of line items
+
+  // Tax & Discounts
+  subtotal       Float
+  taxAmount      Float @default(0)
+  discountAmount Float @default(0)
+  totalAmount    Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@map("invoices")
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+  REFUNDED
+}
+
+// ========== ADDITIONAL UTILITY MODELS ==========
+
+model AppSettings {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  value       Json
+  description String?
+  category    String?
+  isPublic    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
+}
+
+model AuditLog {
+  id         String  @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+  metadata   Json?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+model SystemNotification {
+  id       String                 @id @default(cuid())
+  title    String
+  message  String                 @db.Text
+  type     SystemNotificationType @default(INFO)
+  priority NotificationPriority   @default(NORMAL)
+
+  // Targeting
+  targetUserIds   String[] // Specific users
+  targetGroups    String[] // User groups
+  targetRoles     String[] // User roles
+  targetLocations String[] // Geographic targeting
+
+  // Scheduling
+  publishAt DateTime?
+  expiresAt DateTime?
+
+  // Display Settings
+  isSticky    Boolean @default(false)
+  showOnLogin Boolean @default(false)
+  requiresAck Boolean @default(false)
+
+  // Media
+  imageUrl    String?
+  actionUrl   String?
+  actionLabel String?
+
+  // Status
+  isActive  Boolean @default(true)
+  totalSent Int     @default(0)
+  totalRead Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_notifications")
+}
+
+enum SystemNotificationType {
+  INFO
+  WARNING
+  ERROR
+  SUCCESS
+  MAINTENANCE
+  FEATURE_ANNOUNCEMENT
+  POLICY_UPDATE
+}
+
+// ========== MISSING MODELS FOR FRENCH FEATURES ==========
+
+// Petites annonces (Classifieds/Marketplace)
+model Classified {
+  id       String @id @default(cuid())
+  authorId String
+
+  // Basic Information
+  title       String
+  description String             @db.Text
+  category    ClassifiedCategory
+  subcategory String?
+
+  // Pricing
+  price        Float?
+  currency     String    @default("EUR")
+  priceType    PriceType @default(FIXED)
+  isNegotiable Boolean   @default(false)
+
+  // Item Details
+  condition ItemCondition?
+  brand     String?
+  model     String?
+  size      String?
+  color     String?
+  age       String? // For pets
+
+  // Media
+  images String[]
+  videos String[]
+
+  // Location & Delivery
+  location        Json // Pickup location
+  deliveryOptions String[] // ["pickup", "delivery", "shipping"]
+  deliveryRadius  Float? // km
+
+  // Availability
+  isActive       Boolean   @default(true)
+  isReserved     Boolean   @default(false)
+  isSold         Boolean   @default(false)
+  availableFrom  DateTime?
+  availableUntil DateTime?
+
+  // Contact & Communication
+  contactMethod ContactMethod @default(IN_APP)
+  phoneVisible  Boolean       @default(false)
+  emailVisible  Boolean       @default(false)
+
+  // Moderation
+  moderationStatus ModerationStatus @default(PENDING)
+  moderatedAt      DateTime?
+
+  // Statistics
+  viewCount     Int @default(0)
+  favoriteCount Int @default(0)
+  inquiryCount  Int @default(0)
+
+  // Tags & Search
+  tags     String[]
+  hashtags String[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  soldAt    DateTime?
+  expiresAt DateTime?
+
+  // Relations
+  author    User                 @relation("ClassifiedAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  inquiries ClassifiedInquiry[]
+  favorites ClassifiedFavorite[]
+
+  @@map("classifieds")
+}
+
+enum ClassifiedCategory {
+  PET_SITTING
+  DOG_WALKING
+  GROOMING
+  TRAINING
+  ACCESSORIES
+  FOOD_TREATS
+  TOYS
+  FURNITURE_BEDS
+  TRANSPORT
+  HEALTH_CARE
+  BREEDING
+  ADOPTION
+  SERVICES
+  LOST_FOUND
+  OTHER
+}
+
+enum PriceType {
+  FIXED
+  HOURLY
+  DAILY
+  WEEKLY
+  MONTHLY
+  NEGOTIABLE
+  FREE
+  TRADE
+}
+
+enum ItemCondition {
+  NEW
+  LIKE_NEW
+  GOOD
+  FAIR
+  POOR
+}
+
+enum VetContactMethod {
+  IN_APP
+  PHONE
+  EMAIL
+  WHATSAPP
+}
+
+enum ContactMethod {
+  IN_APP
+  PHONE
+  EMAIL
+  SMS
+  WHATSAPP
+  VIDEO_CALL
+}
+
+model ClassifiedInquiry {
+  id           String @id @default(cuid())
+  classifiedId String
+  inquirerId   String
+
+  // Inquiry Details
+  message    String  @db.Text
+  offerPrice Float?
+  isSerious  Boolean @default(true)
+
+  // Response
+  response    String?   @db.Text
+  respondedAt DateTime?
+
+  // Status
+  status InquiryStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  classified Classified @relation(fields: [classifiedId], references: [id], onDelete: Cascade)
+  inquirer   User       @relation("ClassifiedInquirer", fields: [inquirerId], references: [id], onDelete: Cascade)
+
+  @@map("classified_inquiries")
+}
+
+enum InquiryStatus {
+  PENDING
+  RESPONDED
+  ACCEPTED
+  DECLINED
+  COMPLETED
+  CANCELLED
+}
+
+model ClassifiedFavorite {
+  id           String   @id @default(cuid())
+  classifiedId String
+  userId       String
+  createdAt    DateTime @default(now())
+
+  // Relations
+  classified Classified @relation(fields: [classifiedId], references: [id], onDelete: Cascade)
+  user       User       @relation("ClassifiedFavoriter", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([classifiedId, userId])
+  @@map("classified_favorites")
+}
+
+// Questions & Answers Forum
+model Question {
+  id       String @id @default(cuid())
+  authorId String
+
+  // Question Content
+  title    String
+  content  String           @db.Text
+  category QuestionCategory
+  tags     String[]
+
+  // Question Details
+  urgency        QuestionUrgency @default(NORMAL)
+  isAnonymous    Boolean         @default(false)
+  allowsComments Boolean         @default(true)
+
+  // Status
+  isResolved Boolean   @default(false)
+  resolvedAt DateTime?
+  resolvedBy String? // Answer ID that resolved it
+
+  // Moderation
+  moderationStatus ModerationStatus @default(APPROVED)
+
+  // Engagement
+  viewCount Int @default(0)
+  voteScore Int @default(0)
+
+  // Media
+  images String[]
+  videos String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author  User           @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  answers Answer[]
+  votes   QuestionVote[]
+
+  @@map("questions")
+}
+
+enum QuestionCategory {
+  HEALTH_MEDICAL
+  NUTRITION_DIET
+  TRAINING_BEHAVIOR
+  GROOMING_CARE
+  BREEDING
+  ADOPTION
+  LEGAL_ADVICE
+  EMERGENCY
+  GENERAL_CARE
+  PRODUCT_RECOMMENDATION
+  VETERINARY
+  OTHER
+}
+
+enum QuestionUrgency {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  EMERGENCY
+}
+
+model Answer {
+  id         String @id @default(cuid())
+  questionId String
+  authorId   String
+
+  // Answer Content
+  content        String  @db.Text
+  isExpertAnswer Boolean @default(false) // From verified expert
+
+  // Media
+  images    String[]
+  videos    String[]
+  documents String[]
+
+  // Quality & Moderation
+  isVerified       Boolean          @default(false)
+  moderationStatus ModerationStatus @default(APPROVED)
+
+  // Engagement
+  voteScore  Int       @default(0)
+  isAccepted Boolean   @default(false) // Best answer
+  acceptedAt DateTime?
+
+  // Edit History
+  isEdited Boolean   @default(false)
+  editedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  question Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  author   User         @relation("AnswerAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  votes    AnswerVote[]
+
+  @@map("answers")
+}
+
+model QuestionVote {
+  id         String   @id @default(cuid())
+  questionId String
+  userId     String
+  voteType   VoteType
+  createdAt  DateTime @default(now())
+
+  // Relations
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation("QuestionVoter", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, userId])
+  @@map("question_votes")
+}
+
+model AnswerVote {
+  id        String   @id @default(cuid())
+  answerId  String
+  userId    String
+  voteType  VoteType
+  createdAt DateTime @default(now())
+
+  // Relations
+  answer Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  user   User   @relation("AnswerVoter", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([answerId, userId])
+  @@map("answer_votes")
+}
+
+enum VoteType {
+  UP
+  DOWN
+}
+
+// Community Groups (Groupes de discussion par quartier/thème)
+model CommunityGroup {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String? @db.Text
+
+  // Group Configuration
+  groupType GroupType
+  privacy   GroupPrivacy   @default(PUBLIC)
+  category  GroupCategory?
+
+  // Geographic Scope
+  location      Json? // Geographic boundaries
+  radius        Float? // km radius for location-based groups
+  neighborhoods String[] // Specific neighborhoods
+
+  // Membership Rules
+  maxMembers       Int?
+  requiresApproval Boolean      @default(false)
+  allowsInvites    Boolean      @default(true)
+  minimumAge       Int? // Minimum pet age
+  allowedSpecies   PetSpecies[]
+
+  // Visual & Branding
+  avatar     String?
+  coverPhoto String?
+  color      String?
+
+  // Rules & Guidelines
+  rules      String[]
+  guidelines String?  @db.Text
+
+  // Activity Settings
+  allowsEvents      Boolean @default(true)
+  allowsWalks       Boolean @default(true)
+  allowsMarketplace Boolean @default(true)
+
+  // Moderation
+  isActive        Boolean              @default(true)
+  isFeatured      Boolean              @default(false)
+  moderationLevel GroupModerationLevel @default(MODERATE)
+
+  // Statistics
+  memberCount Int @default(0)
+  postCount   Int @default(0)
+  eventCount  Int @default(0)
+
+  // Metadata
+  tags String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  memberships GroupMembership[]
+  posts       GroupPost[]
+  events      GroupEvent[]
+
+  @@map("community_groups")
+}
+
+enum GroupType {
+  NEIGHBORHOOD
+  BREED_SPECIFIC
+  ACTIVITY_BASED
+  SUPPORT_GROUP
+  PROFESSIONAL
+  GENERAL
+  SPECIAL_INTEREST
+}
+
+enum GroupPrivacy {
+  PUBLIC
+  PRIVATE
+  SECRET
+  INVITE_ONLY
+}
+
+enum GroupCategory {
+  LOCAL_COMMUNITY
+  BREED_CLUBS
+  TRAINING_GROUPS
+  HEALTH_SUPPORT
+  ACTIVITY_CLUBS
+  PROFESSIONAL_NETWORK
+  SPECIAL_NEEDS
+  RESCUE_GROUPS
+}
+
+enum GroupModerationLevel {
+  OPEN
+  MODERATE
+  STRICT
+  ADMIN_ONLY
+}
+
+model GroupMembership {
+  id      String @id @default(cuid())
+  groupId String
+  userId  String
+
+  // Membership Status
+  role   GroupRole        @default(MEMBER)
+  status MembershipStatus @default(ACTIVE)
+
+  // Permissions
+  canPost         Boolean @default(true)
+  canComment      Boolean @default(true)
+  canCreateEvents Boolean @default(false)
+  canInvite       Boolean @default(false)
+  canModerate     Boolean @default(false)
+
+  // Activity
+  joinedAt     DateTime  @default(now())
+  lastActiveAt DateTime?
+
+  // Settings
+  notificationsEnabled Boolean @default(true)
+  emailDigest          Boolean @default(false)
+
+  // Moderation
+  warningCount Int       @default(0)
+  isMuted      Boolean   @default(false)
+  mutedUntil   DateTime?
+  mutedReason  String?
+
+  joinReason String? // Why they joined
+  invitedBy  String? // Who invited them
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  group CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User           @relation("GroupMember", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@map("group_memberships")
+}
+
+enum GroupRole {
+  MEMBER
+  MODERATOR
+  ADMIN
+  FOUNDER
+}
+
+enum MembershipStatus {
+  ACTIVE
+  PENDING
+  BANNED
+  LEFT
+  REMOVED
+}
+
+model GroupPost {
+  id       String @id @default(cuid())
+  groupId  String
+  authorId String
+
+  // Post Content
+  title    String?
+  content  String   @db.Text
+  postType PostType @default(TEXT)
+
+  // Media
+  images    String[]
+  videos    String[]
+  documents String[]
+
+  // Engagement
+  isPinned       Boolean @default(false)
+  allowsComments Boolean @default(true)
+
+  // Moderation
+  moderationStatus ModerationStatus @default(APPROVED)
+
+  // Tags & Categories
+  tags     String[]
+  category PostCategory?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  group  CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author User           @relation("GroupPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("group_posts")
+}
+
+model GroupEvent {
+  id          String @id @default(cuid())
+  groupId     String
+  organizerId String
+
+  // Event Details
+  title       String
+  description String    @db.Text
+  eventType   EventType
+
+  // Timing
+  startTime   DateTime
+  endTime     DateTime?
+  isRecurring Boolean   @default(false)
+
+  // Location
+  location Json
+  isOnline Boolean @default(false)
+
+  // Registration
+  maxAttendees     Int?
+  requiresApproval Boolean @default(false)
+
+  // Group Specific
+  membersOnly  Boolean @default(true)
+  allowsGuests Boolean @default(false)
+
+  // Status
+  status EventStatus @default(PUBLISHED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  group     CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  organizer User           @relation("GroupEventOrganizer", fields: [organizerId], references: [id])
+
+  @@map("group_events")
+}
+
+// ========== PET LENDING & CONTRACT SYSTEM ==========
+
+model PetLendingContract {
+  id         String @id @default(cuid())
+  lenderId   String
+  borrowerId String
+  petId      String
+
+  // Contract Details
+  title        String
+  description  String       @db.Text
+  contractType ContractType
+
+  // Duration & Timing
+  startDate        DateTime
+  endDate          DateTime
+  duration         Int // Duration in days
+  isRecurring      Boolean  @default(false)
+  recurringPattern Json? // { frequency: "weekly", days: ["saturday", "sunday"] }
+
+  // Location & Logistics
+  pickupLocation      Json // { address: string, coordinates: {lat, lng}, instructions: string }
+  dropoffLocation     Json // Same structure
+  allowLocationChange Boolean @default(false)
+
+  // Financial Terms
+  dailyRate               Float?        @default(0)
+  totalCost               Float?
+  currency                String        @default("EUR")
+  paymentMethod           PaymentMethod @default(CASH)
+  securityDepositRequired Boolean       @default(true)
+  securityDepositAmount   Float?
+
+  // Care Requirements & Instructions
+  careInstructions      String  @db.Text
+  feedingSchedule       Json // { times: string[], food_type: string, amount: string, special_notes: string }
+  exerciseRequirements  Json // { daily_minutes: number, activities: string[], restrictions: string[] }
+  medicationSchedule    Json? // { medications: [{ name, dosage, times, special_instructions }] }
+  specialNeeds          String? @db.Text
+  emergencyInstructions String? @db.Text
+
+  // Health & Safety Requirements
+  vaccinationRequired       Boolean   @default(true)
+  healthCertificateRequired Boolean   @default(true)
+  healthCertificateDate     DateTime?
+  vetContactRequired        Boolean   @default(true)
+
+  // Allowed Activities & Restrictions
+  allowedActivities    String[] // ["walks", "park_visits", "car_rides", "meeting_other_pets"]
+  restrictedActivities String[] // ["swimming", "off_leash", "crowded_areas"]
+  allowsOtherPets      Boolean  @default(false)
+  allowsChildren       Boolean  @default(true)
+  allowsOutdoorTime    Boolean  @default(true)
+  maxWalkDistance      Float? // km
+
+  // Emergency & Medical
+  emergencyContactInfo Json // { primary: {name, phone, relationship}, secondary: {...}, veterinarian: {...} }
+  preferredVetId       String? // Link to preferred veterinarian
+  insuranceInfo        Json? // Pet insurance details
+  allowsVetVisits      Boolean @default(true)
+  emergencyBudgetLimit Float? // Max amount borrower can spend in emergency
+
+  // Legal & Terms
+  terms              String  @db.Text
+  liabilityTerms     String  @db.Text
+  cancellationPolicy String  @db.Text
+  lateReturnPolicy   String? @db.Text
+  damagePolicy       String? @db.Text
+
+  // Contract Status & Lifecycle
+  status            ContractStatus @default(DRAFT)
+  signedByLender    Boolean        @default(false)
+  signedByBorrower  Boolean        @default(false)
+  lenderSignedAt    DateTime?
+  borrowerSignedAt  DateTime?
+  witnessRequired   Boolean        @default(false)
+  notarizedRequired Boolean        @default(false)
+
+  // Review & Rating
+  allowsReview   Boolean @default(true)
+  lenderRating   Int? // 1-5 stars from lender
+  borrowerRating Int? // 1-5 stars from borrower
+  lenderReview   String? @db.Text
+  borrowerReview String? @db.Text
+
+  // Communication & Updates
+  allowsPhotoUpdates Boolean         @default(true)
+  allowsVideoUpdates Boolean         @default(false)
+  updateFrequency    UpdateFrequency @default(DAILY)
+  lastUpdateSent     DateTime?
+
+  // Tracking & History
+  totalActiveTime Int? @default(0) // Total minutes pet was with borrower
+  handoverCount   Int  @default(0)
+  extensionCount  Int  @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  activatedAt DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  // Relations
+  petOwner        User                @relation("PetOwnerLender", fields: [lenderId], references: [id])
+  petBorrower     User                @relation("PetBorrower", fields: [borrowerId], references: [id])
+  pet             Pet                 @relation(fields: [petId], references: [id])
+  preferredVet    VetProfile?         @relation(fields: [preferredVetId], references: [id])
+  witnesses       ContractWitness[]
+  handovers       PetHandover[]
+  extensions      ContractExtension[]
+  emergencyEvents EmergencyResponse[]
+  updates         ContractUpdate[]
+  disputes        ContractDispute[]
+
+  @@map("pet_lending_contracts")
+}
+
+enum ContractType {
+  PET_SITTING
+  DOG_WALKING
+  BOARDING
+  DAYCARE
+  VACATION_CARE
+  EMERGENCY_CARE
+  BREEDING_ARRANGEMENT
+  TRAINING_SESSION
+  SOCIALIZATION
+  MEDICAL_CARE
+  TEMPORARY_FOSTERING
+  OTHER
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  CARD
+  PAYPAL
+  CRYPTO
+  BARTER_EXCHANGE
+  FREE
+}
+
+enum ContractStatus {
+  DRAFT
+  PENDING_SIGNATURES
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  EXPIRED
+  DISPUTED
+  TERMINATED
+  ON_HOLD
+}
+
+enum UpdateFrequency {
+  HOURLY
+  TWICE_DAILY
+  DAILY
+  EVERY_OTHER_DAY
+  WEEKLY
+  AS_NEEDED
+  NO_UPDATES
+}
+
+model ContractWitness {
+  id          String      @id @default(cuid())
+  contractId  String
+  witnessId   String
+  witnessType WitnessType
+  signedAt    DateTime?
+  signature   String? // Digital signature or confirmation code
+  notes       String?     @db.Text
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  contract PetLendingContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  witness  User               @relation(fields: [witnessId], references: [id])
+
+  @@unique([contractId, witnessId])
+  @@map("contract_witnesses")
+}
+
+enum WitnessType {
+  FRIEND
+  FAMILY_MEMBER
+  VETERINARIAN
+  PROFESSIONAL
+  NOTARY
+  COMMUNITY_MEMBER
+}
+
+model PetHandover {
+  id           String       @id @default(cuid())
+  contractId   String
+  handoverType HandoverType
+
+  // Participants
+  lenderId     String
+  borrowerId   String
+  supervisorId String? // Optional third party supervisor
+
+  // Scheduling
+  scheduledAt DateTime
+  actualAt    DateTime?
+  completedAt DateTime?
+
+  // Location
+  location Json // Where handover takes place
+
+  // Pet Condition Assessment
+  petCondition  Json // { physical_state: string, behavior_state: string, energy_level: string, appetite: string }
+  healthCheck   Json? // { temperature, weight, visible_issues, notes }
+  behaviorNotes String? @db.Text
+
+  // Items & Accessories
+  itemsTransferred Json // { food: quantity, toys: [names], accessories: [types], medications: [details] }
+  returnItems      Json? // Items to be returned (for return handover)
+  missingItems     String[] // Items not returned
+
+  // Documentation
+  photos         String[] // Photos taken during handover
+  videos         String[] // Videos if needed
+  signedDocument String? // Signed handover document URL
+
+  // Verification & Security
+  verificationMethod VerificationMethod @default(PHOTO_ID)
+  securityCode       String? // Code for verification
+  bothPartiesPresent Boolean            @default(true)
+
+  // Issues & Notes
+  issues          String[]
+  lenderNotes     String?  @db.Text
+  borrowerNotes   String?  @db.Text
+  supervisorNotes String?  @db.Text
+
+  // Status
+  status              HandoverStatus @default(SCHEDULED)
+  confirmedByLender   Boolean        @default(false)
+  confirmedByBorrower Boolean        @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  contract    PetLendingContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  petOwner    User               @relation("PetOwnerHandover", fields: [lenderId], references: [id])
+  petBorrower User               @relation("PetBorrowerHandover", fields: [borrowerId], references: [id])
+  supervisor  User?              @relation("HandoverSupervisor", fields: [supervisorId], references: [id])
+
+  @@map("pet_handovers")
+}
+
+enum HandoverType {
+  PICKUP
+  RETURN
+  CHECK_IN
+  EMERGENCY_RETURN
+  EXTENSION_PICKUP
+}
+
+enum VerificationMethod {
+  PHOTO_ID
+  DIGITAL_CODE
+  BIOMETRIC
+  VIDEO_CALL
+  WITNESS_VERIFICATION
+  GPS_LOCATION
+}
+
+enum HandoverStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DISPUTED
+  NO_SHOW
+}
+
+model ContractExtension {
+  id          String @id @default(cuid())
+  contractId  String
+  requestedBy String // User ID who requested extension
+
+  // Extension Details
+  originalEndDate DateTime
+  newEndDate      DateTime
+  additionalDays  Int
+  reason          String   @db.Text
+
+  // Financial Impact
+  additionalCost Float? @default(0)
+  newTotalCost   Float?
+
+  // Approval Process
+  status         ExtensionStatus @default(PENDING)
+  approvedBy     String?
+  approvedAt     DateTime?
+  rejectedReason String?         @db.Text
+
+  // Terms Modification
+  modifiedTerms      String? @db.Text
+  requiresNewSigning Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  contract PetLendingContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@map("contract_extensions")
+}
+
+enum ExtensionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  EXPIRED
+}
+
+model ContractUpdate {
+  id         String @id @default(cuid())
+  contractId String
+  senderId   String
+
+  // Update Content
+  updateType UpdateType
+  title      String?
+  message    String     @db.Text
+
+  // Media Content
+  photos   String[]
+  videos   String[]
+  location Json? // Current location update
+
+  // Pet Status
+  petStatus Json? // { mood: string, activity: string, health: string, appetite: string }
+
+  // Scheduling
+  isScheduled  Boolean   @default(false)
+  scheduledFor DateTime?
+
+  // Response & Interaction
+  requiresResponse Boolean   @default(false)
+  responseReceived Boolean   @default(false)
+  responseMessage  String?   @db.Text
+  respondedAt      DateTime?
+
+  // Priority & Urgency
+  priority    UpdatePriority @default(NORMAL)
+  isEmergency Boolean        @default(false)
+  readAt      DateTime?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  contract PetLendingContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@map("contract_updates")
+}
+
+enum UpdateType {
+  GENERAL_UPDATE
+  PHOTO_SHARE
+  LOCATION_UPDATE
+  HEALTH_UPDATE
+  BEHAVIOR_REPORT
+  FEEDING_REPORT
+  EXERCISE_REPORT
+  MILESTONE_ACHIEVED
+  ISSUE_REPORT
+  EMERGENCY_ALERT
+  MEDICATION_GIVEN
+  VET_VISIT
+  SOCIAL_INTERACTION
+}
+
+enum UpdatePriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  EMERGENCY
+}
+
+model EmergencyResponse {
+  id            String        @id @default(cuid())
+  contractId    String?
+  userId        String
+  emergencyType EmergencyType
+
+  // Emergency Details
+  title       String
+  description String            @db.Text
+  severity    EmergencySeverity
+  location    Json? // Where emergency occurred
+
+  // Pet Information
+  petId            String?
+  petCondition     String? @db.Text
+  immediateActions String? @db.Text
+
+  // Response & Actions
+  actionsTaken       String[]
+  emergencyContacts  String[] // Who was contacted
+  vetContacted       Boolean  @default(false)
+  vetDetails         Json? // Which vet, when contacted, response
+  authorityContacted Boolean  @default(false)
+  authorityDetails   Json? // Police, fire dept, etc.
+
+  // Resolution
+  status           EmergencyStatus @default(ACTIVE)
+  resolvedAt       DateTime?
+  resolution       String?         @db.Text
+  followUpRequired Boolean         @default(false)
+  followUpDate     DateTime?
+
+  // Documentation
+  photos    String[]
+  videos    String[]
+  documents String[] // Medical reports, police reports, etc.
+
+  // Costs & Insurance
+  emergencyCost    Float?  @default(0)
+  insuranceClaimed Boolean @default(false)
+  insuranceClaimId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  contract PetLendingContract? @relation(fields: [contractId], references: [id])
+  user     User                @relation(fields: [userId], references: [id])
+
+  @@map("emergency_responses")
+}
+
+enum EmergencyType {
+  MEDICAL_EMERGENCY
+  ACCIDENT
+  LOST_PET
+  STOLEN_PET
+  AGGRESSIVE_BEHAVIOR
+  POISONING
+  INJURY
+  SEVERE_ILLNESS
+  NATURAL_DISASTER
+  HUMAN_EMERGENCY
+  PROPERTY_DAMAGE
+  LEGAL_ISSUE
+  OTHER
+}
+
+enum EmergencySeverity {
+  LOW
+  MODERATE
+  HIGH
+  CRITICAL
+  LIFE_THREATENING
+}
+
+enum EmergencyStatus {
+  ACTIVE
+  UNDER_CONTROL
+  RESOLVED
+  ESCALATED
+  CLOSED
+}
+
+model ContractDispute {
+  id            String @id @default(cuid())
+  contractId    String
+  raisedById    String
+  againstUserId String
+
+  // Dispute Details
+  disputeType DisputeType
+  title       String
+  description String          @db.Text
+  category    DisputeCategory
+
+  // Evidence & Documentation
+  evidence    String[] // URLs to photos, videos, documents
+  witnesses   String[] // User IDs of witnesses
+  chatHistory Json? // Relevant message history
+
+  // Severity & Impact
+  severity            DisputeSeverity @default(MODERATE)
+  financialImpact     Float?          @default(0)
+  requestedResolution String          @db.Text
+
+  // Mediation Process
+  status         DisputeStatus @default(OPEN)
+  mediatorId     String? // Assigned mediator
+  mediationNotes String?       @db.Text
+
+  // Resolution
+  resolutionType     ResolutionType?
+  resolution         String?         @db.Text
+  compensationAmount Float?          @default(0)
+  agreedByBoth       Boolean         @default(false)
+  resolvedAt         DateTime?
+
+  // Appeal Process
+  appealable     Boolean   @default(true)
+  appealDeadline DateTime?
+  appealRaised   Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  contract PetLendingContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@map("contract_disputes")
+}
+
+enum DisputeType {
+  BREACH_OF_CONTRACT
+  PAYMENT_ISSUE
+  PET_CARE_NEGLIGENCE
+  PROPERTY_DAMAGE
+  LATE_RETURN
+  UNAUTHORIZED_ACTIVITY
+  COMMUNICATION_FAILURE
+  SAFETY_VIOLATION
+  HEALTH_ISSUE
+  BEHAVIORAL_PROBLEM
+  FRAUD
+  HARASSMENT
+  OTHER
+}
+
+enum DisputeCategory {
+  FINANCIAL
+  CARE_QUALITY
+  SAFETY_SECURITY
+  COMMUNICATION
+  BREACH_OF_TERMS
+  LEGAL
+}
+
+enum DisputeSeverity {
+  MINOR
+  MODERATE
+  MAJOR
+  SEVERE
+  CRITICAL
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  IN_MEDIATION
+  AWAITING_RESPONSE
+  RESOLVED
+  ESCALATED
+  CLOSED
+  APPEALED
+}
+
+enum ResolutionType {
+  MUTUAL_AGREEMENT
+  MEDIATED_SETTLEMENT
+  COMPENSATION_AWARDED
+  CONTRACT_TERMINATION
+  WARNING_ISSUED
+  ACCOUNT_RESTRICTION
+  LEGAL_ACTION
+  NO_ACTION_REQUIRED
+}
+
+// ========== PROFESSIONAL VETERINARY NETWORK ==========
+
+model VetProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  // Professional Identity
+  professionalType VetProfessionalType
+  licenseNumber    String              @unique
+  licenseIssuer    String // Licensing authority/country
+  licenseExpiry    DateTime
+
+  // Practice Information
+  practiceName    String?
+  practiceType    VetPracticeType
+  specializations String[] // Areas of expertise
+  certifications  String[] // Additional certifications
+
+  // Experience & Education
+  yearsExperience Int
+  education       Json // { degree: string, institution: string, year: number }[]
+  languages       String[]
+
+  // Services & Availability
+  servicesOffered    String[]
+  consultationTypes  VetConsultationType[]
+  availability       Json // Weekly schedule
+  emergencyAvailable Boolean               @default(false)
+  houseCalls         Boolean               @default(false)
+  telemedicine       Boolean               @default(true)
+
+  // Geographic Coverage
+  serviceAreas      String[] // Cities/regions served
+  maxTravelDistance Float? // km for house calls
+
+  // Pricing & Billing
+  consultationFees Json // { type: string, price: number, currency: string }[]
+  acceptsInsurance Boolean         @default(true)
+  acceptedInsurers String[]
+  paymentMethods   PaymentMethod[]
+
+  // Professional Network
+  clinicAffiliations      String[] // Associated clinics/hospitals
+  professionalMemberships String[] // Vet associations, etc.
+  referralNetwork         String[] // IDs of other professionals
+
+  // Verification & Trust
+  isVerified          Boolean              @default(false)
+  verificationLevel   VetVerificationLevel @default(BASIC)
+  verifiedAt          DateTime?
+  backgroundCheckDate DateTime?
+
+  // Ratings & Reviews
+  averageRating      Float  @default(0)
+  totalReviews       Int    @default(0)
+  totalConsultations Int    @default(0)
+  responseTime       Float? // Average response time in hours
+
+  // Communication Preferences
+  preferredContactMethod VetContactMethod @default(IN_APP)
+  autoResponder          Boolean          @default(false)
+  autoResponse           String?          @db.Text
+
+  // Professional Settings
+  acceptsNewClients   Boolean @default(true)
+  requiresReferral    Boolean @default(false)
+  specialtyFocus      String? @db.Text
+  treatmentPhilosophy String? @db.Text
+
+  // Status & Availability
+  isActive      Boolean   @default(true)
+  onVacation    Boolean   @default(false)
+  vacationUntil DateTime?
+  lastActiveAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consultations  VetConsultation[]    @relation("VetProfile")
+  vetConnections VetConnection[]      @relation("VetConnections")
+  medicalRecords PetMedicalRecord[]   @relation("ProfessionalMedicalRecord")
+  contracts      PetLendingContract[]
+
+  @@map("vet_profiles")
+}
+
+enum VetProfessionalType {
+  VETERINARIAN
+  VET_SPECIALIST
+  VET_SURGEON
+  VET_DENTIST
+  VET_DERMATOLOGIST
+  VET_CARDIOLOGIST
+  VET_NEUROLOGIST
+  VET_ONCOLOGIST
+  VET_BEHAVIORIST
+  VET_NUTRITIONIST
+  VET_TECHNICIAN
+  VET_NURSE
+  ANIMAL_PHYSIOTHERAPIST
+  ANIMAL_CHIROPRACTOR
+  ANIMAL_ACUPUNCTURIST
+  GROOMER
+  TRAINER
+  BEHAVIORIST
+  PET_NUTRITIONIST
+}
+
+enum VetPracticeType {
+  SMALL_ANIMAL_CLINIC
+  LARGE_ANIMAL_PRACTICE
+  MIXED_PRACTICE
+  SPECIALTY_HOSPITAL
+  EMERGENCY_CLINIC
+  MOBILE_PRACTICE
+  TELEHEALTH_ONLY
+  RESEARCH_INSTITUTION
+  TEACHING_HOSPITAL
+  GOVERNMENT_AGENCY
+  ANIMAL_SHELTER
+  ZOO_AQUARIUM
+  INDEPENDENT_CONSULTANT
+}
+
+enum VetConsultationType {
+  ROUTINE_CHECKUP
+  EMERGENCY_CONSULTATION
+  FOLLOW_UP
+  SECOND_OPINION
+  BEHAVIORAL_CONSULTATION
+  NUTRITIONAL_CONSULTATION
+  SURGICAL_CONSULTATION
+  DENTAL_CONSULTATION
+  VACCINATION_CONSULTATION
+  TELEHEALTH
+  HOME_VISIT
+  PHONE_CONSULTATION
+  VIDEO_CONSULTATION
+}
+
+enum VetVerificationLevel {
+  BASIC
+  ENHANCED
+  PROFESSIONAL
+  EXPERT
+  CERTIFIED
+}
+
+enum VerificationLevel {
+  BASIC
+  ENHANCED
+  VERIFIED
+  PREMIUM
+  TRUSTED
+}
+
+model VetConnection {
+  id           String @id @default(cuid())
+  vetProfileId String
+  petOwnerId   String
+
+  // Connection Details
+  connectionType VetConnectionType
+  relationship   VetRelationshipType
+  establishedAt  DateTime            @default(now())
+
+  // Authorization & Permissions
+  isAuthorized      Boolean            @default(false)
+  authorizedAt      DateTime?
+  authorizationCode String? // For secure access
+  permissionLevel   VetPermissionLevel @default(READ_ONLY)
+
+  // Scope of Access
+  accessiblePets String[] // Pet IDs this professional can access
+  accessDuration Int? // Days of access (null = permanent)
+  expiresAt      DateTime?
+
+  // Communication Preferences
+  allowDirectContact Boolean       @default(true)
+  emergencyContact   Boolean       @default(false)
+  preferredMethod    ContactMethod @default(IN_APP)
+
+  // Professional Context
+  primaryVet     Boolean @default(false)
+  specialtyRole  String? // What they're consulted for
+  referralSource String? // Who referred this professional
+
+  // Activity Tracking
+  lastContactDate      DateTime?
+  totalConsultations   Int       @default(0)
+  lastConsultationDate DateTime?
+
+  // Status
+  isActive          Boolean   @default(true)
+  pausedAt          DateTime? // Temporarily paused
+  terminatedAt      DateTime?
+  terminationReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  vetProfile VetProfile @relation("VetConnections", fields: [vetProfileId], references: [id])
+  petOwner   User       @relation("ClientConnections", fields: [petOwnerId], references: [id])
+
+  @@unique([vetProfileId, petOwnerId])
+  @@map("vet_connections")
+}
+
+enum VetConnectionType {
+  PRIMARY_VET
+  SPECIALIST_REFERRAL
+  EMERGENCY_CONTACT
+  SECOND_OPINION
+  CONSULTANT
+  TEMPORARY_CARE
+  BREEDING_ADVISOR
+  BEHAVIORAL_SPECIALIST
+  NUTRITIONIST
+  GROOMER
+  TRAINER
+}
+
+enum VetRelationshipType {
+  ACTIVE_CLIENT
+  FORMER_CLIENT
+  CONSULTATION_ONLY
+  REFERRAL_ONLY
+  EMERGENCY_ONLY
+  SPECIALIST_CONSULT
+  COLLABORATIVE_CARE
+}
+
+enum VetPermissionLevel {
+  READ_ONLY
+  LIMITED_UPDATE
+  FULL_ACCESS
+  EMERGENCY_ACCESS
+  ADMINISTRATIVE
+}
+
+model VetConsultation {
+  id         String  @id @default(cuid())
+  vetId      String
+  petOwnerId String
+  petId      String?
+
+  // Consultation Details
+  consultationType VetConsultationType
+  title            String
+  description      String              @db.Text
+
+  // Scheduling
+  scheduledAt       DateTime?
+  startedAt         DateTime?
+  completedAt       DateTime?
+  estimatedDuration Int? // minutes
+  actualDuration    Int? // minutes
+
+  // Consultation Mode
+  isRemote    Boolean @default(false)
+  location    Json? // If in-person
+  meetingLink String? // If remote
+  meetingId   String? // Video call ID
+
+  // Medical Context
+  chiefComplaint String?                @db.Text
+  symptoms       String[]
+  duration       String? // How long symptoms present
+  urgency        VetConsultationUrgency @default(ROUTINE)
+
+  // Examination & Findings
+  vitalSigns            Json? // { temperature, weight, heart_rate, respiratory_rate }
+  physicalExam          String? @db.Text
+  diagnosis             String? @db.Text
+  differentialDiagnosis String? @db.Text
+
+  // Treatment & Recommendations
+  treatmentPlan  String?   @db.Text
+  medications    Json? // [{ name, dosage, frequency, duration, instructions }]
+  followUpNeeded Boolean   @default(false)
+  followUpDate   DateTime?
+  referrals      String? // Other specialists recommended
+
+  // Documentation
+  clinicalNotes String?  @db.Text
+  photos        String[] // Clinical photos
+  documents     String[] // Lab results, x-rays, etc.
+  voiceNotes    String[] // Audio recordings
+
+  // Billing & Payment
+  consultationFee Float?
+  currency        String        @default("EUR")
+  paymentStatus   PaymentStatus @default(PENDING)
+  paidAt          DateTime?
+  invoiceNumber   String?
+
+  // Quality & Follow-up
+  clientSatisfaction Int? // 1-5 rating
+  clientFeedback     String? @db.Text
+  followUpCompleted  Boolean @default(false)
+  outcomeTracking    Json? // Treatment effectiveness
+
+  // Legal & Compliance
+  consentGiven    Boolean                @default(false)
+  consentDocument String? // Signed consent form
+  privacyLevel    VetConsultationPrivacy @default(PRIVATE)
+
+  // Status
+  status             VetConsultationStatus @default(SCHEDULED)
+  cancellationReason String?
+  rescheduledFrom    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  veterinarian User       @relation("VetConsultation", fields: [vetId], references: [id])
+  petOwner     User       @relation("ClientConsultation", fields: [petOwnerId], references: [id])
+  vetProfile   VetProfile @relation("VetProfile", fields: [vetId], references: [userId], map: "vet_consultations_profile_fkey")
+
+  @@map("vet_consultations")
+}
+
+enum VetConsultationUrgency {
+  ROUTINE
+  URGENT
+  EMERGENCY
+  CRITICAL
+}
+
+enum VetConsultationStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+}
+
+enum VetConsultationPrivacy {
+  PRIVATE
+  SHARED_WITH_NETWORK
+  RESEARCH_ANONYMOUS
+  PUBLIC_ANONYMOUS
+}
+
+model VetReview {
+  id         String @id @default(cuid())
+  reviewerId String
+  vetId      String
+
+  // Review Content
+  rating  Int // 1-5 stars
+  title   String?
+  content String  @db.Text
+
+  // Specific Ratings
+  expertiseRating     Int? // Knowledge and skill
+  communicationRating Int? // How well they explain
+  availabilityRating  Int? // Response time and accessibility
+  valueRating         Int? // Value for money
+  recommendationScore Int? // Likelihood to recommend
+
+  // Context
+  serviceUsed      VetConsultationType?
+  consultationDate DateTime?
+  isVerified       Boolean              @default(false) // Verified consultation
+
+  // Detailed Feedback
+  positiveAspects String[] // What was good
+  negativeAspects String[] // Areas for improvement
+  wouldRecommend  Boolean  @default(true)
+  wouldUseAgain   Boolean  @default(true)
+
+  // Response from Professional
+  vetResponse String?   @db.Text
+  respondedAt DateTime?
+
+  // Moderation
+  moderationStatus ModerationStatus @default(APPROVED)
+  moderatedAt      DateTime?
+
+  // Helpfulness
+  helpfulVotes    Int @default(0)
+  notHelpfulVotes Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  reviewer     User @relation("VetReviewAuthor", fields: [reviewerId], references: [id])
+  veterinarian User @relation("ReviewedVeterinarian", fields: [vetId], references: [id])
+
+  @@unique([reviewerId, vetId])
+  @@map("vet_reviews")
+}
+
+// ========== MEDICAL RECORDS & HEALTH MANAGEMENT ==========
+
+model PetMedicalRecord {
+  id          String               @id @default(cuid())
+  petId       String
+  createdById String
+  recordType  PetMedicalRecordType
+
+  // Record Details
+  title       String
+  description String   @db.Text
+  date        DateTime
+
+  // Clinical Information
+  clinicalFindings String? @db.Text
+  diagnosis        String? @db.Text
+  treatment        String? @db.Text
+  outcome          String? @db.Text
+
+  // Vital Signs & Measurements
+  vitalSigns    Json? // { temperature, weight, heart_rate, blood_pressure }
+  bodyCondition Json? // { weight, body_score, muscle_condition }
+
+  // Medications & Treatments
+  medications  Json? // Current medications prescribed
+  treatments   Json? // Treatments administered
+  vaccinations Json? // Vaccines given
+
+  // Laboratory & Diagnostics
+  labResults     Json? // Laboratory test results
+  imagingResults Json? // X-rays, ultrasounds, etc.
+  testReports    String[] // URLs to test documents
+
+  // Provider Information
+  veterinarianName String?
+  clinicName       String?
+  licenseNumber    String?
+
+  // Documentation
+  documents String[] // Medical documents, reports
+  images    String[] // Clinical photos
+
+  // Follow-up & Monitoring
+  followUpRequired Boolean   @default(false)
+  followUpDate     DateTime?
+  monitoringNotes  String?   @db.Text
+
+  // Access Control & Privacy
+  isPrivate    Boolean   @default(true)
+  sharedWith   String[] // User IDs with access
+  accessExpiry DateTime? // When shared access expires
+
+  // Verification & Authenticity
+  isVerified       Boolean @default(false)
+  verifiedBy       String? // Professional who verified
+  digitalSignature String? // Cryptographic signature
+
+  // Metadata
+  tags     String[]
+  priority RecordPriority @default(NORMAL)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator             User                     @relation("RecordCreator", fields: [createdById], references: [id])
+  professionalCreator VetProfile?              @relation("ProfessionalMedicalRecord", fields: [createdById], references: [userId], map: "medical_records_vet_creator_fkey")
+  accessGrants        PetMedicalRecordAccess[]
+
+  @@map("medical_records")
+}
+
+enum PetMedicalRecordType {
+  GENERAL_CHECKUP
+  VACCINATION_RECORD
+  SURGICAL_PROCEDURE
+  EMERGENCY_VISIT
+  DIAGNOSTIC_TEST
+  TREATMENT_PLAN
+  MEDICATION_RECORD
+  BEHAVIORAL_ASSESSMENT
+  DENTAL_PROCEDURE
+  REHABILITATION
+  FOLLOW_UP_VISIT
+  SECOND_OPINION
+  SPECIALIST_CONSULTATION
+  HEALTH_CERTIFICATE
+  INSURANCE_EXAM
+  BREEDING_EVALUATION
+  EUTHANASIA_RECORD
+}
+
+enum RecordPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+  EMERGENCY
+}
+
+model PetMedicalRecordAccess {
+  id          String @id @default(cuid())
+  recordId    String
+  userId      String
+  grantedById String
+
+  // Access Details
+  accessType  AccessType
+  accessLevel AccessLevel
+  purpose     String?     @db.Text
+
+  // Duration & Scope
+  grantedAt   DateTime  @default(now())
+  expiresAt   DateTime?
+  isTemporary Boolean   @default(false)
+
+  // Permissions
+  canView     Boolean @default(true)
+  canEdit     Boolean @default(false)
+  canShare    Boolean @default(false)
+  canDownload Boolean @default(false)
+
+  // Usage Tracking
+  lastAccessedAt DateTime?
+  accessCount    Int       @default(0)
+
+  // Status
+  isActive     Boolean   @default(true)
+  revokedAt    DateTime?
+  revokedBy    String?
+  revokeReason String?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  record PetMedicalRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  user   User             @relation(fields: [userId], references: [id])
+
+  @@unique([recordId, userId])
+  @@map("medical_record_access")
+}
+
+enum AccessType {
+  EMERGENCY_ACCESS
+  CONSULTATION_ACCESS
+  SHARED_CARE
+  TEMPORARY_CARE
+  RESEARCH_ACCESS
+  INSURANCE_CLAIM
+  LEGAL_PROCEEDING
+  BREEDING_EVALUATION
+}
+
+enum AccessLevel {
+  VIEW_ONLY
+  LIMITED_EDIT
+  FULL_ACCESS
+  ADMINISTRATIVE
+}
+
+// ========== SECURITY & VERIFICATION SYSTEM ==========
+
+model IdentityVerification {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  // Verification Methods
+  verificationType VerificationType[]
+
+  // Identity Documents
+  documentType    DocumentType
+  documentNumber  String
+  documentExpiry  DateTime?
+  documentCountry String
+  documentImages  String[] // Encrypted/secure URLs
+
+  // Biometric Verification
+  biometricType BiometricType?
+  biometricData String? // Encrypted biometric hash
+
+  // Address Verification
+  addressVerified   Boolean   @default(false)
+  addressDocument   String? // Utility bill, bank statement
+  addressVerifiedAt DateTime?
+
+  // Phone & Email Verification
+  phoneVerified   Boolean   @default(false)
+  emailVerified   Boolean   @default(false)
+  phoneVerifiedAt DateTime?
+  emailVerifiedAt DateTime?
+
+  // Professional Verification (for vets)
+  professionalVerified Boolean @default(false)
+  licenseVerified      Boolean @default(false)
+  educationVerified    Boolean @default(false)
+
+  // Verification Status
+  status            VerificationStatus @default(PENDING)
+  verificationLevel VerificationLevel  @default(BASIC)
+  verifiedAt        DateTime?
+  verifiedBy        String? // Admin/system who verified
+
+  // Review & Appeals
+  rejectionReason String?   @db.Text
+  appealCount     Int       @default(0)
+  lastAppealDate  DateTime?
+
+  // Security & Fraud Detection
+  riskScore        Float    @default(0) // 0-1 risk assessment
+  fraudFlags       String[] // Potential fraud indicators
+  duplicateCheck   Boolean  @default(false)
+  duplicateMatches String[] // Potential duplicate accounts
+
+  // Compliance & Legal
+  gdprConsent   Boolean   @default(false)
+  dataRetention DateTime? // When to delete verification data
+  auditTrail    Json // Verification process audit log
+
+  // Metadata
+  ipAddress         String?
+  deviceFingerprint String?
+  userAgent         String?
+  geolocation       Json?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  expiresAt DateTime? // When verification expires
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("identity_verifications")
+}
+
+enum VerificationType {
+  DOCUMENT_SCAN
+  BIOMETRIC_FACE
+  BIOMETRIC_FINGERPRINT
+  PHONE_SMS
+  PHONE_CALL
+  EMAIL_LINK
+  EMAIL_CODE
+  ADDRESS_VERIFICATION
+  PROFESSIONAL_LICENSE
+  EDUCATIONAL_CREDENTIALS
+  REFERENCE_CHECK
+  VIDEO_CALL
+  IN_PERSON
+}
+
+enum DocumentType {
+  PASSPORT
+  DRIVERS_LICENSE
+  NATIONAL_ID
+  RESIDENCE_PERMIT
+  PROFESSIONAL_LICENSE
+  UTILITY_BILL
+  BANK_STATEMENT
+  INSURANCE_DOCUMENT
+  TAX_DOCUMENT
+  EMPLOYMENT_LETTER
+  EDUCATIONAL_CERTIFICATE
+}
+
+enum BiometricType {
+  FACIAL_RECOGNITION
+  FINGERPRINT
+  VOICE_RECOGNITION
+  IRIS_SCAN
+  PALM_PRINT
+}
+
+enum VerificationStatus {
+  PENDING
+  IN_REVIEW
+  VERIFIED
+  REJECTED
+  EXPIRED
+  SUSPENDED
+  APPEALING
+}
+
+model BackgroundCheck {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  // Check Types Performed
+  checkTypes BackgroundCheckType[]
+
+  // Criminal History
+  criminalCheck   Boolean      @default(false)
+  criminalResult  CheckResult?
+  criminalDetails Json? // Details if issues found
+
+  // Pet-related Incidents
+  animalAbuseCheck  Boolean      @default(false)
+  animalAbuseResult CheckResult?
+  animalIncidents   Json? // Previous incidents
+
+  // Reference Checks
+  referenceCheck     Boolean @default(false)
+  references         Json[] // [{ name, relationship, contact, status, notes }]
+  referencesVerified Int     @default(0)
+
+  // Credit & Financial (for paid services)
+  creditCheck   Boolean    @default(false)
+  creditScore   Int?
+  financialRisk RiskLevel?
+
+  // Professional Background (for vets)
+  professionalCheck    Boolean               @default(false)
+  malpracticeHistory   Boolean               @default(false)
+  disciplinaryActions  Json[]
+  professionalStanding ProfessionalStanding?
+
+  // Social Media & Online Presence
+  socialMediaCheck      Boolean  @default(false)
+  onlineReputationScore Float? // 0-1 score
+  redFlags              String[] // Concerning online behavior
+
+  // Overall Assessment
+  overallRisk     RiskLevel
+  riskFactors     String[]
+  recommendations String[]  @db.Text
+
+  // Status & Results
+  status      BackgroundCheckStatus @default(IN_PROGRESS)
+  completedAt DateTime?
+  expiresAt   DateTime? // When check expires
+
+  // Provider Information
+  checkProvider     String? // Background check service used
+  providerReference String? // Reference number from provider
+  cost              Float?
+
+  // Legal & Compliance
+  consentGiven   Boolean   @default(false)
+  consentDate    DateTime?
+  disputeRaised  Boolean   @default(false)
+  disputeDetails String?   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("background_checks")
+}
+
+enum BackgroundCheckType {
+  CRIMINAL_HISTORY
+  ANIMAL_ABUSE_REGISTRY
+  SEX_OFFENDER_REGISTRY
+  REFERENCE_CHECK
+  CREDIT_CHECK
+  EMPLOYMENT_HISTORY
+  EDUCATION_VERIFICATION
+  PROFESSIONAL_LICENSE
+  MALPRACTICE_HISTORY
+  DISCIPLINARY_ACTIONS
+  SOCIAL_MEDIA_SCAN
+  ONLINE_REPUTATION
+  COURT_RECORDS
+  BANKRUPTCY_CHECK
+}
+
+enum CheckResult {
+  CLEAR
+  MINOR_ISSUES
+  MAJOR_CONCERNS
+  DISQUALIFYING
+  INSUFFICIENT_DATA
+  ERROR
+}
+
+enum RiskLevel {
+  VERY_LOW
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+  UNACCEPTABLE
+}
+
+enum ProfessionalStanding {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+  SUSPENDED
+  REVOKED
+}
+
+enum BackgroundCheckStatus {
+  INITIATED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  EXPIRED
+  DISPUTED
+}
+
+model TrustScore {
+  id     String @id @default(cuid())
+  userId String
+
+  // Score Components
+  overallScore Float // 0-100 composite score
+
+  // Individual Metrics
+  reliabilityScore   Float @default(50) // Based on contract completion
+  communicationScore Float @default(50) // Response time, clarity
+  careQualityScore   Float @default(50) // Pet care feedback
+  safetyScore        Float @default(50) // Safety incidents
+
+  // Experience Factors
+  totalContracts      Int @default(0)
+  successfulContracts Int @default(0)
+  cancelledContracts  Int @default(0)
+  disputedContracts   Int @default(0)
+
+  // Review Metrics
+  averageRating   Float @default(0)
+  totalReviews    Int   @default(0)
+  positiveReviews Int   @default(0)
+  negativeReviews Int   @default(0)
+
+  // Behavioral Indicators
+  responseTime         Float? // Average response time in hours
+  punctuality          Float  @default(50) // On-time percentage
+  communicationQuality Float  @default(50)
+
+  // Verification Status Impact
+  verificationLevel     VerificationLevel @default(BASIC)
+  backgroundCheckPassed Boolean           @default(false)
+  professionalVerified  Boolean           @default(false)
+
+  // Risk Factors
+  riskFlags       String[]
+  warningCount    Int      @default(0)
+  suspensionCount Int      @default(0)
+
+  // Trend Analysis
+  scoreHistory   Json[] // Historical score changes
+  trendDirection TrendDirection @default(STABLE)
+
+  // Calculation Metadata
+  lastCalculated     DateTime @default(now())
+  calculationVersion String   @default("1.0")
+  dataPoints         Int      @default(0) // How much data used
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("trust_scores")
+}
+
+enum TrendDirection {
+  IMPROVING
+  STABLE
+  DECLINING
+  VOLATILE
+}
+
+model SecurityDeposit {
+  id         String  @id @default(cuid())
+  contractId String?
+  payerId    String
+  receiverId String
+
+  // Deposit Details
+  amount      Float
+  currency    String      @default("EUR")
+  depositType DepositType
+  purpose     String      @db.Text
+
+  // Payment Information
+  paymentMethod   PaymentMethod
+  paymentDate     DateTime?
+  transactionId   String?
+  paymentProvider String? // Stripe, PayPal, etc.
+
+  // Hold & Release
+  status            DepositStatus @default(PENDING)
+  heldUntil         DateTime?
+  releaseConditions String[]      @db.Text
+
+  // Release Process
+  releaseRequested   Boolean   @default(false)
+  releaseRequestDate DateTime?
+  releaseApproved    Boolean   @default(false)
+  releaseDate        DateTime?
+  releaseAmount      Float? // Amount actually released
+
+  // Deductions & Claims
+  deductions       Json[] // [{ reason, amount, evidence }]
+  totalDeductions  Float  @default(0)
+  netReleaseAmount Float?
+
+  // Dispute & Resolution
+  disputeRaised     Boolean @default(false)
+  disputeReason     String? @db.Text
+  arbitrationNeeded Boolean @default(false)
+  finalResolution   String? @db.Text
+
+  // Legal & Compliance
+  terms        String  @db.Text
+  jurisdiction String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  payer    User @relation("DepositPayer", fields: [payerId], references: [id])
+  receiver User @relation("DepositReceiver", fields: [receiverId], references: [id])
+
+  @@map("security_deposits")
+}
+
+enum DepositType {
+  PET_CARE_SECURITY
+  DAMAGE_PROTECTION
+  CANCELLATION_PROTECTION
+  EMERGENCY_FUND
+  TRUST_DEPOSIT
+  PERFORMANCE_BOND
+  CLEANING_DEPOSIT
+  KEY_DEPOSIT
+}
+
+enum DepositStatus {
+  PENDING
+  HELD
+  PARTIALLY_RELEASED
+  FULLY_RELEASED
+  FORFEITED
+  DISPUTED
+  REFUNDED
+}
+
+// ========== INSURANCE & PROTECTION ==========
+
+model PetInsurancePolicy {
+  id      String  @id @default(cuid())
+  ownerId String
+  petId   String?
+
+  // Policy Details
+  policyNumber String              @unique
+  insurer      String
+  policyType   InsurancePolicyType
+  coverage     InsuranceCoverage[]
+
+  // Coverage Details
+  coverageLimit Float? // Annual limit
+  deductible    Float  @default(0)
+  coinsurance   Float? // Percentage covered after deductible
+
+  // Premium & Billing
+  premiumAmount    Float
+  premiumFrequency BillingFrequency
+  currency         String           @default("EUR")
+
+  // Policy Period
+  effectiveDate  DateTime
+  expirationDate DateTime
+  renewalDate    DateTime?
+  autoRenewal    Boolean   @default(true)
+
+  // Pre-existing Conditions
+  preExistingConditions String[]
+  waitingPeriods        Json // { condition: string, waiting_days: number }[]
+
+  // Benefits & Limits
+  annualLimit      Float?
+  perIncidentLimit Float?
+  lifetimeLimit    Float?
+
+  // Coverage Exclusions
+  exclusions        String[]
+  breedRestrictions String[]
+  ageRestrictions   Json // { min_age, max_age, coverage_changes }
+
+  // Third-party Liability
+  liabilityCoverage Boolean @default(false)
+  liabilityLimit    Float?
+
+  // Status & Claims
+  status            PolicyStatus @default(ACTIVE)
+  claimsCount       Int          @default(0)
+  totalClaimsAmount Float        @default(0)
+  lastClaimDate     DateTime?
+
+  // Documentation
+  policyDocument         String? // URL to policy PDF
+  certificateOfInsurance String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  owner  User             @relation(fields: [ownerId], references: [id])
+  claims InsuranceClaim[]
+
+  @@map("pet_insurance_policies")
+}
+
+enum InsurancePolicyType {
+  ACCIDENT_ONLY
+  ACCIDENT_ILLNESS
+  COMPREHENSIVE
+  WELLNESS_PREVENTIVE
+  LIABILITY_ONLY
+  THIRD_PARTY_LIABILITY
+  TRAVEL_INSURANCE
+  BREEDING_INSURANCE
+  MORTALITY_INSURANCE
+}
+
+enum InsuranceCoverage {
+  ACCIDENTS
+  ILLNESSES
+  CHRONIC_CONDITIONS
+  HEREDITARY_CONDITIONS
+  BEHAVIORAL_THERAPY
+  ALTERNATIVE_THERAPY
+  PRESCRIPTION_MEDICATIONS
+  DIAGNOSTIC_TESTS
+  SURGERY
+  HOSPITALIZATION
+  EMERGENCY_CARE
+  SPECIALIST_CARE
+  PREVENTIVE_CARE
+  DENTAL_CARE
+  BREEDING_COMPLICATIONS
+  THIRD_PARTY_LIABILITY
+  LEGAL_EXPENSES
+  TRAVEL_COVERAGE
+  LOST_PET_ADVERTISING
+  CREMATION_BURIAL
+}
+
+enum BillingFrequency {
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUALLY
+  ANNUALLY
+}
+
+enum PolicyStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+  EXPIRED
+  SUSPENDED
+  PENDING_RENEWAL
+  LAPSED
+}
+
+model InsuranceClaim {
+  id         String  @id @default(cuid())
+  policyId   String
+  claimantId String
+  petId      String?
+
+  // Claim Details
+  claimNumber  String    @unique
+  incidentDate DateTime
+  claimDate    DateTime  @default(now())
+  claimType    ClaimType
+
+  // Incident Description
+  description   String @db.Text
+  causeOfLoss   String
+  circumstances String @db.Text
+  location      Json? // Where incident occurred
+
+  // Medical Information
+  veterinarianName String?
+  clinicName       String?
+  diagnosisCode    String?
+  treatmentCode    String?
+
+  // Financial Details
+  totalExpenses     Float
+  claimedAmount     Float
+  approvedAmount    Float? @default(0)
+  deductibleAmount  Float  @default(0)
+  coinsuranceAmount Float? @default(0)
+  paidAmount        Float? @default(0)
+
+  // Documentation
+  receipts       String[] // Medical bills, receipts
+  medicalRecords String[] // Vet reports, test results
+  photos         String[] // Incident photos
+  policereport   String? // If applicable
+
+  // Processing
+  status      ClaimStatus @default(SUBMITTED)
+  adjusterId  String? // Insurance adjuster
+  reviewNotes String?     @db.Text
+
+  // Timeline
+  acknowledgedAt DateTime?
+  processedAt    DateTime?
+  approvedAt     DateTime?
+  rejectedAt     DateTime?
+  paidAt         DateTime?
+  closedAt       DateTime?
+
+  // Resolution
+  rejectionReason String?   @db.Text
+  appealRaised    Boolean   @default(false)
+  appealDate      DateTime?
+  appealOutcome   String?   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  policy   PetInsurancePolicy @relation(fields: [policyId], references: [id])
+  claimant User               @relation(fields: [claimantId], references: [id])
+
+  @@map("insurance_claims")
+}
+
+enum ClaimType {
+  ACCIDENT
+  ILLNESS
+  EMERGENCY
+  ROUTINE_CARE
+  PREVENTIVE_CARE
+  DENTAL_CARE
+  BEHAVIORAL_THERAPY
+  ALTERNATIVE_THERAPY
+  LIABILITY_CLAIM
+  LEGAL_EXPENSES
+  LOST_PET
+  DEATH_BURIAL
+  BREEDING_COMPLICATION
+}
+
+enum ClaimStatus {
+  SUBMITTED
+  ACKNOWLEDGED
+  UNDER_REVIEW
+  PENDING_INFORMATION
+  APPROVED
+  PARTIALLY_APPROVED
+  REJECTED
+  PAID
+  CLOSED
+  APPEALED
+}
+
+// ========== LEGAL & CONTRACT TEMPLATES ==========
+
+model ContractTemplate {
+  id          String @id @default(cuid())
+  createdById String
+
+  // Template Details
+  name         String
+  description  String       @db.Text
+  templateType ContractType
+  version      String       @default("1.0")
+
+  // Template Content
+  content   String @db.Text // Template with placeholders
+  clauses   Json[] // Individual clauses
+  variables Json[] // Template variables
+
+  // Legal Information
+  jurisdiction String
+  governingLaw String
+  language     String    @default("en")
+  legalReview  Boolean   @default(false)
+  reviewedBy   String? // Legal professional
+  reviewDate   DateTime?
+
+  // Usage & Popularity
+  usageCount  Int     @default(0)
+  rating      Float   @default(0)
+  isPublic    Boolean @default(false)
+  isCertified Boolean @default(false)
+
+  // Categories & Tags
+  categories String[]
+  tags       String[]
+  complexity TemplateComplexity @default(SIMPLE)
+
+  // Versioning
+  parentTemplateId String? // If this is a version of another template
+  isLatestVersion  Boolean @default(true)
+  changelog        Json[] // Version changes
+
+  // Status
+  status       TemplateStatus @default(DRAFT)
+  publishedAt  DateTime?
+  deprecatedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creator User @relation(fields: [createdById], references: [id])
+
+  @@map("contract_templates")
+}
+
+enum TemplateComplexity {
+  SIMPLE
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum TemplateStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  DEPRECATED
+  ARCHIVED
+}
+
+model LegalDocument {
+  id      String @id @default(cuid())
+  ownerId String
+
+  // Document Details
+  documentType LegalDocumentType
+  title        String
+  description  String?           @db.Text
+
+  // Document Content
+  content String  @db.Text
+  fileUrl String? // PDF or other format
+
+  // Legal Information
+  jurisdiction String
+  governingLaw String
+  language     String @default("en")
+
+  // Signatures & Execution
+  requiresSignature Boolean   @default(false)
+  signedAt          DateTime?
+  signatories       Json[] // Who needs to sign
+  witnesses         Json[] // Witness information
+  notarized         Boolean   @default(false)
+  notaryInfo        Json?
+
+  // Validity & Status
+  effectiveDate  DateTime?
+  expirationDate DateTime?
+  status         DocumentStatus @default(DRAFT)
+
+  // Version Control
+  version           String  @default("1.0")
+  previousVersionId String?
+  changeHistory     Json[]
+
+  // Access & Privacy
+  isConfidential Boolean  @default(true)
+  accessList     String[] // User IDs with access
+
+  // Metadata
+  tags             String[]
+  relatedContracts String[] // Related contract IDs
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  owner User @relation(fields: [ownerId], references: [id])
+
+  @@map("legal_documents")
+}
+
+enum LegalDocumentType {
+  TERMS_OF_SERVICE
+  PRIVACY_POLICY
+  LIABILITY_WAIVER
+  INDEMNITY_AGREEMENT
+  NON_DISCLOSURE_AGREEMENT
+  POWER_OF_ATTORNEY
+  EMERGENCY_AUTHORIZATION
+  MEDICAL_CONSENT
+  LIABILITY_RELEASE
+  PROPERTY_DAMAGE_WAIVER
+  PHOTO_VIDEO_RELEASE
+  ARBITRATION_AGREEMENT
+  GOVERNING_LAW_CLAUSE
+  FORCE_MAJEURE_CLAUSE
+  TERMINATION_AGREEMENT
+}
+
+enum DocumentStatus {
+  DRAFT
+  PENDING_REVIEW
+  ACTIVE
+  EXPIRED
+  REVOKED
+  SUSPENDED
+}

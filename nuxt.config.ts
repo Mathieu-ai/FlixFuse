@@ -5,10 +5,12 @@ export default defineNuxtConfig({
   i18n: {
     locales: [
       { code: 'en', name: 'English', file: 'en.json' },
-      { code: 'nl', name: 'Nederlands', file: 'nl.json' }
+      { code: 'nl', name: 'Nederlands', file: 'nl.json' },
+      { code: 'cn', name: '中文', file: 'cn.json' },
+      { code: 'jp', name: '日本語', file: 'jp.json' }
     ],
     defaultLocale: 'en',
-    strategy: 'prefix',
+    strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',

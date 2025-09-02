@@ -1,18 +1,438 @@
 {
   "welcome": {
-    "title": "Welkom bij FlixFuse",
-    "description": "Jouw ultieme bestemming voor film- en tv-showaanbevelingen."
+    "title": "Welkom bij PawGo",
+    "description": "Jouw ultieme sociale netwerk en communityplatform voor huisdieren."
+  },
+  "privacy": {
+    "petProfiles": {
+      "title": "Huisdierprofielen",
+      "description": "Beheer de profielinformatie van je huisdier, inclusief medische geschiedenis, voorkeuren en meer."
+    },
+    "title": "Privacybeleid",
+    "description": "Lees hoe wij jouw persoonlijke informatie en huisdiergegevens verzamelen, gebruiken en beschermen.",
+    "lastUpdated": "Laatst bijgewerkt",
+    "tableOfContents": "Inhoudsopgave",
+    "sections": {
+      "dataCollection": "Gegevens die wij verzamelen",
+      "personalInformation": "Persoonlijke informatie",
+      "dataUsage": "Hoe wij jouw gegevens gebruiken",
+      "dataSharing": "Gegevensdeling & Derden",
+      "dataSecurity": "Gegevensbeveiliging",
+      "yourRights": "Jouw rechten",
+      "dataRetention": "Bewaartermijn van gegevens",
+      "cookiesTracking": "Cookies & Tracking",
+      "childrenPrivacy": "Privacy van kinderen",
+      "internationalTransfers": "Internationale overdrachten",
+      "contact": "Contact opnemen"
+    }
+  },
+  "about": {
+    "title": "Over ons",
+    "subtitle": "Harten verbinden, poot voor poot",
+    "description": "Lees meer over PawGo - het communityplatform voor huisdieren dat huisdiereigenaren, dienstverleners en dierenliefhebbers wereldwijd verbindt.",
+    "hero": {
+      "title": "Harten verbinden, poot voor poot",
+      "description": "PawGo is meer dan alleen een platform - we zijn een gemeenschap van gepassioneerde dierenliefhebbers die zich inzetten voor het creëren van betekenisvolle connecties, het waarborgen van de veiligheid van huisdieren en het maken van huisdierbezit tot een vreugdevolle, ondersteunde ervaring voor iedereen."
+    },
+    "beta": {
+      "title": "Bètaversie",
+      "description": "PawGo bevindt zich momenteel in bèta. We verbeteren voortdurend op basis van feedback van gebruikers."
+    },
+    "ourStory": {
+      "title": "Ons verhaal",
+      "beginning": {
+        "heading": "Het begin",
+        "p1": "PawGo begon met een simpele observatie: huisdiereigenaren hadden behoefte aan een betere manier om contact te maken, ervaringen te delen en betrouwbare diensten te vinden voor hun geliefde metgezellen.",
+        "p2": "Wat begon als een klein idee is uitgegroeid tot een uitgebreid platform dat duizenden huisdierfamilies wereldwijd bedient."
+      },
+      "growing": {
+        "heading": "Samen groeien",
+        "p1": "Naarmate onze gemeenschap groeide, groeide ook ons begrip van wat huisdiereigenaren echt nodig hebben.",
+        "p2": "We zijn geëvolueerd van een simpel netwerkplatform naar een uitgebreid ecosysteem dat elk aspect van huisdierbezit ondersteunt.",
+        "p3": "Onze reis gaat verder terwijl we werken aan het toegankelijker, veiliger en leuker maken van huisdierbezit voor iedereen."
+      }
+    },
+    "openSource": {
+      "p1": "Wij geloven in transparantie en door de gemeenschap gedreven ontwikkeling. Daarom is PawGo open source.",
+      "p2": "Bekijk onze code op GitHub",
+      "repoLinkText": "PawGo Repository",
+      "starsLabel": "sterren",
+      "forksLabel": "forks"
+    },
+    "whatWeDo": {
+      "title": "Wat wij doen"
+    },
+    "coreValues": {
+      "title": "Onze kernwaarden"
+    },
+    "founder": {
+      "title": "Ontmoet onze oprichter",
+      "paragraph1": "Mathieu is de enige maker van PawGo. Als levenslange dierenliefhebber groeide PawGo nadat er een kat in de familie kwam; de vader van Mathieu kreeg de kat van een vriend, en de kat woont nu bij Mathieu thuis. Die ervaring inspireerde hem om een veiligere, vriendelijkere plek te bouwen waar huisdiereigenaren elkaar kunnen helpen.",
+      "paragraph2": "Heb je vragen of wil je contact opnemen? Je kunt ons bereiken via",
+      "quickFacts": {
+        "github": "Actieve open source-bijdrager op GitHub",
+        "status": "Solodeveloper die PawGo in bèta bouwt",
+        "story": "Geïnspireerd door persoonlijke adoptie-ervaring met een huisdier"
+      }
+    },
+    "safety": {
+      "alertTitle": "Jouw veiligheid is onze prioriteit",
+      "alertDescription": "Wij hanteren uitgebreide veiligheidsmaatregelen om zowel huisdieren als hun families bij elke interactie te beschermen."
+    },
+    "partnerships": {
+      "title": "Gemeenschapspartnerschappen"
+    },
+    "technology": {
+      "title": "Technologie & Innovatie"
+    },
+    "futureVision": {
+      "title": "Onze visie voor de toekomst",
+      "heroTitle": "De huisdiergemeenschap van morgen bouwen",
+      "heroParagraph": "Wij zien een wereld voor ons waarin elke huisdiereigenaar toegang heeft tot een ondersteunende gemeenschap, professionele diensten en de middelen die nodig zijn om de best mogelijke zorg aan hun metgezellen te bieden."
+    },
+    "joinUs": {
+      "title": "Word lid van onze gemeenschap",
+      "heroTitle": "Klaar om contact te maken?",
+      "heroParagraph": "Sluit je aan bij duizenden huisdierfamilies die al de vreugde hebben ontdekt van deel uitmaken van de PawGo-gemeenschap.",
+      "ctaJoin": "Word vandaag nog lid van PawGo",
+      "ctaExplore": "Ontdek functies",
+      "ctaContact": "Neem contact op",
+      "contactBlurb": "Vragen? We horen graag van je via",
+      "contactEmail": "hellopawgo.com"
+    },
+    "missionStatement": {
+      "statements": {
+        "safetyFirst": "Veiligheid eerst",
+        "communityDriven": "Gemeenschapsgericht",
+        "petFocused": "Huisdiergericht",
+        "trustedPartners": "Betrouwbare partners",
+        "innovation": "Innovatie",
+        "compassion": "Compassie"
+      }
+    }
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fout"
+  },
+  "services": {
+    "socialNetworking": {
+      "title": "Sociaal Netwerk",
+      "description": "Maak contact met andere huisdiereigenaren in jouw buurt en daarbuiten.",
+      "features": {
+        "profiles": "Huisdierprofielen en het delen van foto's",
+        "groups": "Lokale gemeenschapsgroepen",
+        "events": "Evenementplanning en coördinatie",
+        "playdates": "Speelafspraken en wandelschema's",
+        "venues": "Ontdek huisdiervriendelijke locaties"
+      }
+    },
+    "professionalServices": {
+      "title": "Professionele Diensten",
+      "description": "Toegang tot geverifieerde huisdierprofessionals voor al jouw zorgbehoeften.",
+      "features": {
+        "veterinary": "Dierenartsconsultaties",
+        "sitting": "Professionele dierenoppas",
+        "walking": "Hondenuitlaatservices",
+        "grooming": "Verzorging en spabehandelingen",
+        "training": "Training en gedragsbegeleiding"
+      }
+    },
+    "emergencySupport": {
+      "title": "Noodhulp",
+      "description": "Krijg hulp wanneer je die het meest nodig hebt via ons noodnetwerk.",
+      "features": {
+        "contacts": "24/7 noodcontacten",
+        "lostPet": "Systeem voor vermiste huisdieren",
+        "veterinaryReferrals": "Noodverwijzingen naar dierenartsen",
+        "rescue": "Coördinatie van reddingsacties in de gemeenschap",
+        "crisis": "Crisisondersteuningsnetwerk"
+      }
+    },
+    "education": {
+      "title": "Educatie & Bronnen",
+      "description": "Leer en groei als huisdiereigenaar met deskundige begeleiding.",
+      "features": {
+        "articles": "Deskundige artikelen en gidsen",
+        "tutorials": "Trainingshandleidingen en tips",
+        "health": "Advies over gezondheid en voeding",
+        "breeds": "Informatie per ras",
+        "qa": "Vragen & Antwoorden met professionals"
+      }
+    },
+    "marketplace": {
+      "title": "Marktplaats",
+      "description": "Vind en deel huisdiergerelateerde producten en diensten.",
+      "features": {
+        "buysell": "Koop en verkoop huisdierbenodigdheden",
+        "recommendations": "Aanbevelingen voor diensten",
+        "reviews": "Productrecensies en beoordelingen",
+        "directory": "Lokale bedrijvengids",
+        "classifieds": "Kleinadvertenties"
+      }
+    },
+    "healthTracking": {
+      "title": "Gezondheidsregistratie",
+      "description": "Houd uitgebreide gezondheidsdossiers bij voor jouw huisdieren.",
+      "features": {
+        "vaccinations": "Vaccinatie-tracking",
+        "history": "Opslag van medisch dossier",
+        "reminders": "Herinneringen voor afspraken",
+        "medications": "Medicatieschema's",
+        "milestones": "Tracking van gezondheidsmijlpalen"
+      }
+    }
+  },
+  "values": {
+    "petSafety": {
+      "title": "Veiligheid van huisdieren boven alles",
+      "description": "Elke beslissing die we nemen, geeft prioriteit aan het welzijn en de veiligheid van huisdieren en hun families.",
+      "examples": {
+        "backgroundChecks": "Uitgebreide achtergrondcontroles voor dienstverleners",
+        "monitoring": "Realtime veiligheidsmonitoring tijdens diensten",
+        "protocols": "Noodprocedures en trainingen",
+        "education": "Doorlopende veiligheidseducatie voor leden van de gemeenschap",
+        "zeroTolerance": "Zero tolerance voor elke vorm van dierenmishandeling of -verwaarlozing"
+      }
+    },
+    "communityFirst": {
+      "title": "Gemeenschap eerst",
+      "description": "Wij geloven in de kracht van gemeenschap om het leven van zowel huisdieren als hun mensen te verrijken.",
+      "examples": {
+        "connections": "Het bevorderen van oprechte connecties tussen huisdierfamilies",
+        "localBusiness": "Ondersteuning van lokale huisdierbedrijven en diensten",
+        "inclusive": "Creëren van inclusieve ruimtes voor alle soorten huisdiereigenaren",
+        "knowledge": "Stimuleren van kennisdeling en wederzijdse ondersteuning",
+        "friendships": "Het opbouwen van blijvende vriendschappen door gedeelde liefde voor huisdieren"
+      }
+    },
+    "transparency": {
+      "title": "Transparantie & Vertrouwen",
+      "description": "Wij werken volledig transparant en doen er alles aan om vertrouwen te winnen en te behouden.",
+      "examples": {
+        "communication": "Duidelijke, eerlijke communicatie over beleid en veranderingen",
+        "feedback": "Open feedbackkanalen en responsieve ondersteuning",
+        "pricing": "Transparante prijzen zonder verborgen kosten",
+        "safety": "Openbare veiligheidsrapporten en incidentmeldingen",
+        "updates": "Regelmatige community-updates en voortgangsrapporten"
+      }
+    },
+    "innovation": {
+      "title": "Innovatie met een doel",
+      "description": "Wij omarmen technologie en innovatie om huisdieren en hun families beter te bedienen.",
+      "examples": {
+        "aiMatching": "AI-aangedreven matching voor compatibele huisdieren en eigenaren",
+        "monitoring": "Geavanceerde veiligheidsmonitoring en waarschuwingssystemen",
+        "health": "Voorspellende gezondheidsinzichten en preventieve herinneringen",
+        "experience": "Naadloze gebruikerservaring op alle apparaten",
+        "improvements": "Continue platformverbeteringen op basis van gebruikersfeedback"
+      }
+    },
+    "inclusivity": {
+      "title": "Inclusiviteit & Toegankelijkheid",
+      "description": "Elke huisdiereigenaar verdient toegang tot gemeenschap en zorg, ongeacht de omstandigheden.",
+      "examples": {
+        "multilingual": "Meertalige ondersteuning voor diverse gemeenschappen",
+        "accessibility": "Toegankelijkheidsfuncties voor gebruikers met een beperking",
+        "pricing": "Flexibele prijsopties voor verschillende economische situaties",
+        "allPets": "Ondersteuning voor alle soorten huisdieren en gezinssamenstellingen",
+        "education": "Educatieve bronnen voor beginnende huisdiereigenaren"
+      }
+    },
+    "environmental": {
+      "title": "Milieuverantwoordelijkheid",
+      "description": "Wij geven om de planeet waar onze huisdieren wonen en stimuleren duurzame praktijken.",
+      "examples": {
+        "carbon": "CO2-neutrale platformactiviteiten",
+        "ecoFriendly": "Promoten van milieuvriendelijke huisdierproducten en -diensten",
+        "local": "Ondersteunen van lokale bedrijven om transportimpact te verminderen",
+        "responsible": "Stimuleren van verantwoord huisdierbezit",
+        "conservation": "Partnerschappen met natuurbeschermingsorganisaties"
+      }
+    }
+  },
+  "safety": {
+    "userVerification": {
+      "title": "Gebruikersverificatie",
+      "description": "Uitgebreide verificatieprocessen om de veiligheid van de gemeenschap te waarborgen.",
+      "measures": {
+        "idVerification": "Overheids-ID-verificatie voor alle gebruikers",
+        "backgroundChecks": "Achtergrondcontroles voor dienstverleners",
+        "licenseVerification": "Verificatie van professionele licenties",
+        "references": "Referentiecontroles en beoordelingen",
+        "monitoring": "Continue monitoring van veiligheidsinbreuken",
+        "reverification": "Regelmatige herverificatie van referenties"
+      }
+    },
+    "petProtection": {
+      "title": "Bescherming van huisdieren",
+      "description": "Specifieke maatregelen om huisdieren te beschermen tijdens alle interacties.",
+      "measures": {
+        "vaccination": "Verificatie van vaccinatierecords",
+        "assessment": "Gedragsbeoordeling voor huisdieren",
+        "tracking": "Realtime locatie-tracking tijdens diensten",
+        "emergency": "Noodcontactmeldingen",
+        "insurance": "Verificatie van huisdierenverzekering voor diensten",
+        "hotline": "24/7 noodlijn voor dierenartsen"
+      }
+    },
+    "communityMonitoring": {
+      "title": "Gemeenschapsmonitoring",
+      "description": "Actieve monitoring om de normen van de gemeenschap te handhaven.",
+      "measures": {
+        "aiModeration": "AI-aangedreven inhoudsmoderatie",
+        "humanReview": "Handmatige beoordeling van gerapporteerde inhoud",
+        "alerts": "Proactieve veiligheidswaarschuwingssystemen",
+        "reporting": "Mechanismen voor community-meldingen",
+        "audits": "Regelmatige veiligheidsaudits en beoordelingen",
+        "response": "Transparante incidentresponsprocedures"
+      }
+    },
+    "dataSecurity": {
+      "title": "Gegevensbeveiliging",
+      "description": "Bescherming van gebruikers- en huisdiergegevens met beveiliging op bedrijfsniveau.",
+      "measures": {
+        "encryption": "End-to-end encryptie voor alle communicatie",
+        "storage": "Veilige, versleutelde gegevensopslag",
+        "audits": "Regelmatige beveiligingsaudits en penetratietests",
+        "compliance": "Naleving van GDPR en CCPA",
+        "minimal": "Principe van minimale gegevensverzameling",
+        "rights": "Recht op verwijdering en overdraagbaarheid van gegevens"
+      }
+    }
+  },
+  "stats": {
+    "activeFamilies": "Actieve huisdierfamilies",
+    "registeredPets": "Geregistreerde huisdieren",
+    "cities": "Steden wereldwijd",
+    "rating": "Gemiddelde beoordeling"
+  },
+  "partnerships": {
+    "animalShelters": {
+      "title": "Dierenasiels",
+      "description": "Ondersteuning bij adoptie en reddingsacties voor huisdieren"
+    },
+    "veterinaryClinics": {
+      "title": "Dierenklinieken",
+      "description": "Huisdieren verbinden met kwalitatieve medische zorg"
+    },
+    "petBusinesses": {
+      "title": "Huisdierbedrijven",
+      "description": "Promotie van lokale huisdierdiensten en -producten"
+    }
+  },
+  "technology": {
+    "aiMatching": {
+      "title": "AI-aangedreven matching",
+      "description": "Lichtgewicht algoritmes die relevante matches suggereren met minimale gegevensblootstelling en met behoud van privacy als kern.",
+      "benefits": {
+        "compatibility": "Compatibiliteitssuggesties op basis van persoonlijkheid (lokaal waar mogelijk)",
+        "location": "Locatiebewuste suggesties met minimale precisieblootstelling",
+        "activity": "Matchen van activiteitsvoorkeuren zonder extra persoonlijke gegevens op te slaan",
+        "professional": "Opt-in aanbevelingen voor professionals",
+        "safety": "Gerichte veiligheidsindicatoren zonder brede profilering"
+      }
+    },
+    "safetyMonitoring": {
+      "title": "Realtime veiligheidsmonitoring",
+      "description": "Geavanceerde monitoringssystemen die de veiligheid van huisdieren en eigenaren tijdens alle interacties waarborgen.",
+      "benefits": {
+        "gps": "GPS-tracking tijdens wandelingen en diensten",
+        "checkins": "Automatische veiligheidscheck-ins",
+        "alerts": "Noodwaarschuwingssystemen",
+        "detection": "Detectie en reactie op incidenten",
+        "assessment": "Voorspellende veiligheidsrisicobeoordeling"
+      }
+    },
+    "healthIntegration": {
+      "title": "Gezondheidsintegratie",
+      "description": "Naadloze integratie met diergeneeskundige systemen en gezondheidstracking-apparaten.",
+      "benefits": {
+        "reminders": "Automatische vaccinatieherinneringen",
+        "analysis": "Analyse van gezondheidstrends en inzichten",
+        "wearables": "Integratie van gegevens van draagbare apparaten",
+        "records": "Synchronisatie van dierenartsdossiers",
+        "preventive": "Aanbevelingen voor preventieve zorg"
+      }
+    },
+    "smartCommunication": {
+      "title": "Slimme communicatie",
+      "description": "Intelligente berichtensystemen die duidelijke, veilige communicatie mogelijk maken.",
+      "benefits": {
+        "translation": "Automatische vertaling voor meertalige gebruikers",
+        "protocols": "Veiligheidsgerichte communicatieprotocollen",
+        "emergency": "Noodcommunicatiekanalen",
+        "consultation": "Tools voor professionele consultaties",
+        "moderation": "Moderatie van communitygesprekken"
+      }
+    }
+  },
+  "future": {
+    "globalExpansion": {
+      "title": "Wereldwijde uitbreiding",
+      "description": "PawGo wereldwijd beschikbaar maken voor huisdierfamilies met lokale ondersteuning en diensten."
+    },
+    "aiHealth": {
+      "title": "AI-gezondheidsinzichten",
+      "description": "Geavanceerde AI die persoonlijke gezondheidsaanbevelingen en vroege waarschuwingssystemen biedt."
+    },
+    "zeroHomelessness": {
+      "title": "Nul dakloze huisdieren",
+      "description": "Samenwerken met asielen en reddingsorganisaties om ervoor te zorgen dat elk huisdier een liefdevol thuis vindt."
+    }
+  },
+  "misc": {
+    "howWeLiveValue": "Zo leven wij deze waarde na:",
+    "quickFacts": "Korte feiten",
+    "communityPartnerships": "We zijn trots op onze samenwerking met dierenwelzijnsorganisaties, dierenklinieken en huisdierbedrijven om een sterkere, meer verbonden huisdiergemeenschap te creëren.",
+    "safetyTrust": "Veiligheid & Vertrouwen",
+    "communityImpact": "Impact op de gemeenschap",
+    "founderLocation": "Locatie:"
+  },
+  "nav": {
+    "playground": "Speeltuin",
+    "privacy": "Privacy",
+    "terms": "Gebruiksvoorwaarden",
+    "about": "Over"
+  },
+  "terms": {
+    "title": "Gebruiksvoorwaarden",
+    "description": "Uitgebreide richtlijnen voor het veilig en verantwoordelijk gebruik van ons huisdiercommunityplatform.",
+    "lastUpdated": "Laatst bijgewerkt",
+    "tableOfContents": "Inhoudsopgave",
+    "sections": {
+      "agreement": "1. Overeenkomst & Acceptatie",
+      "userResponsibilities": "2. Jouw verantwoordelijkheden als PawGo-lid",
+      "petSafety": "3. Veiligheid & zorgnormen voor huisdieren",
+      "communityGuidelines": "4. Gemeenschapsrichtlijnen & gedrag",
+      "ageRequirements": "5. Leeftijdsvereisten & bescherming van minderjarigen",
+      "serviceProviders": "6. Voorwaarden voor dienstverleners",
+      "liability": "7. Aansprakelijkheid & verzekering",
+      "platformRules": "8. Platformregels & handhaving",
+      "payments": "9. Betalingen & terugbetalingen",
+      "termination": "10. Beëindiging van het account",
+      "disputes": "11. Geschillenbeslechting",
+      "legal": "12. Juridische informatie"
+    },
+    "alerts": {
+      "welcomeTitle": "Welkom bij PawGo!",
+      "welcomeDesc": "Door ons platform te gebruiken, word je lid van een gemeenschap die zich inzet voor de veiligheid van huisdieren en verantwoord huisdierbezit.",
+      "importantTitle": "Belangrijk",
+      "importantDesc": "Als je niet akkoord gaat met deze voorwaarden, gebruik PawGo dan niet. Wij zijn er om iedereen in onze gemeenschap te beschermen.",
+      "petSafetyTitle": "Huisdierenveiligheid eerst",
+      "petSafetyDesc": "Het welzijn van huisdieren is onze hoogste prioriteit. Deze normen zijn niet onderhandelbaar."
+    }
   },
   "playground": {
-    "title": "Speelruimte",
-    "description": "Verken en test verschillende functies van FlixFuse.",
+    "title": "Speeltuin",
+    "description": "Ontdek en test verschillende functies van PawGo.",
     "chat": {
-      "title": "Chat Speelruimte",
+      "title": "Chat-speeltuin",
       "btn": {
-        "start": "Start Chat",
-        "stop": "Stop Chat",
-        "reset": "Reset Chat",
-        "send": "Verstuur",
+        "start": "Start chat",
+        "stop": "Stop chat",
+        "reset": "Chat resetten",
+        "send": "Verzenden",
         "placeholder": "Typ je bericht..."
       }
     }

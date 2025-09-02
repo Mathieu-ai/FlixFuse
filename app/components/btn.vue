@@ -9,7 +9,7 @@ const props = defineProps({
     default: 'primary'
   },
   variant: {
-    type: String as () => 'solid' | 'link' | 'outline' | 'soft' | 'subtle' | 'ghost',
+    type: String as () => 'solid' | 'outline' | 'soft' | 'subtle' | 'ghost',
     default: 'solid'
   },
   size: {
@@ -44,15 +44,21 @@ const normalized = computed(() => {
 </script>
 
 <template>
-  <UButton v-bind="attrs" :to="normalized" :color="props.color" :variant="props.variant" :size="props.size"
-    :icon="props.icon" :icon-right="props.iconRight" :loading="props.loading" :disabled="props.disabled"
-    :block="props.block" :rounded="props.rounded" :aria-label="props.ariaLabel" :type="props.type">
-    <template v-if="props.icon" #leading>
-      <UIcon :name="props.icon" class="mr-2" />
-    </template>
+  <UButton 
+    v-bind="attrs" 
+    :to="normalized" 
+    :color="props.color" 
+    :variant="props.variant" 
+    :size="props.size"
+    :icon="props.icon" 
+    :icon-right="props.iconRight" 
+    :loading="props.loading" 
+    :disabled="props.disabled"
+    :block="props.block" 
+    :rounded="props.rounded" 
+    :aria-label="props.ariaLabel" 
+    :type="props.type"
+  >
     <slot />
-    <template v-if="props.iconRight" #trailing>
-      <UIcon :name="props.iconRight" class="ml-2" />
-    </template>
   </UButton>
 </template>

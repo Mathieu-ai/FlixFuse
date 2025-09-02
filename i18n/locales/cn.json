@@ -1,0 +1,442 @@
+{
+	"welcome": {
+		"title": "歡迎來到 PawGo",
+		"description": "您終極的寵物社交網路與社群平台。"
+	},
+	"privacy": {
+		"petProfiles": {
+			"title": "寵物檔案",
+			"description": "管理您寵物的檔案資訊，包括醫療歷史、偏好設定等。"
+		},
+		"title": "隱私權政策",
+		"description": "瞭解我們如何收集、使用並保護您的個人資訊與寵物資料。",
+		"lastUpdated": "最後更新",
+		"tableOfContents": "目錄",
+		"sections": {
+			"dataCollection": "我們收集的資料",
+			"personalInformation": "個人資訊",
+			"dataUsage": "我們如何使用您的資料",
+			"dataSharing": "資料分享與第三方",
+			"dataSecurity": "資料安全",
+			"yourRights": "您的權利",
+			"dataRetention": "資料保留",
+			"cookiesTracking": "Cookies 與追蹤",
+			"childrenPrivacy": "兒童隱私",
+			"internationalTransfers": "國際傳輸",
+			"contact": "聯絡我們"
+		}
+	},
+
+	"about": {
+		"title": "關於我們",
+		"subtitle": "用一隻爪子連結一顆心",
+		"description": "瞭解 PawGo — 一個連結寵物飼主、服務提供者與動物愛好者的寵物社群平台。",
+		"hero": {
+			"title": "用一隻爪子連結一顆心",
+			"description": "PawGo 不只是個平台——我們是一群熱愛動物的社群，致力於建立有意義的連結、確保寵物安全，並讓飼養寵物的過程變得更快樂且有支持。"
+		},
+		"beta": {
+			"title": "測試版",
+			"description": "PawGo 目前處於測試階段，我們會根據使用者回饋持續改進。"
+		},
+		"ourStory": {
+			"title": "我們的故事",
+			"beginning": {
+				"heading": "起始",
+				"p1": "PawGo 的起源自一個簡單的觀察：飼主需要更好的方式來連結、分享經驗，並找到值得信賴的服務。",
+				"p2": "從一個小小的想法發展而來，現在已成為為全球數千個寵物家庭提供服務的完整平台。"
+			},
+			"growing": {
+				"heading": "共同成長",
+				"p1": "隨著社群的成長，我們也更了解飼主實際的需求。",
+				"p2": "我們從一個簡單的社交平台，演變為支援寵物飼養各面向的完整生態系。",
+				"p3": "我們的旅程仍在繼續，致力於讓飼養寵物更容易、更安全、也更令人愉快。"
+			}
+		},
+		"openSource": {
+			"p1": "我們相信透明與社群驅動的開發，因此 PawGo 採用開源。",
+			"p2": "在 GitHub 上查看我們的程式碼",
+			"repoLinkText": "PawGo 倉庫",
+			"starsLabel": "顆星",
+			"forksLabel": "分支"
+		},
+		"whatWeDo": {
+			"title": "我們的服務"
+		},
+		"coreValues": {
+			"title": "我們的核心價值"
+		},
+		"founder": {
+			"title": "認識創辦人",
+			"paragraph1": "Mathieu 是 PawGo 的獨立創辦者。作為一位終身的動物愛好者——當一隻貓加入家庭後，PawGo 的理念逐漸成形；Mathieu 的父親從朋友那裡帶回這隻貓，牠後來成為家中的一員。這段經驗啟發他建立一個更安全、更友善的空間，讓飼主互相連結並互助。",
+			"paragraph2": "有問題或想聯絡？歡迎透過以下方式與我們聯繫：",
+			"quickFacts": {
+				"github": "GitHub 活躍的開源貢獻者",
+				"status": "獨立開發者，持續建置測試版的 PawGo",
+				"story": "靈感來自個人的寵物收養經驗"
+			}
+		},
+		"safety": {
+			"alertTitle": "您的安全是我們的首要任務",
+			"alertDescription": "我們在每次互動中實施全面的安全措施，以保護寵物與其家庭。"
+		},
+		"partnerships": {
+			"title": "社群夥伴關係"
+		},
+		"technology": {
+			"title": "技術與創新"
+		},
+		"futureVision": {
+			"title": "我們對未來的願景",
+			"heroTitle": "打造明日的寵物社群",
+			"heroParagraph": "我們期望每位飼主都能獲得支持性的社群、專業服務及必要資源，為寵物提供最佳照護。"
+		},
+		"joinUs": {
+			"title": "加入我們的社群",
+			"heroTitle": "準備好連結了嗎？",
+			"heroParagraph": "加入已經體驗到 PawGo 社群樂趣的千家寵物家庭。",
+			"ctaJoin": "立即加入 PawGo",
+			"ctaExplore": "探索功能",
+			"ctaContact": "聯絡我們",
+			"contactBlurb": "有問題嗎？我們很樂意收到您的來信：",
+			"contactEmail": "hellopawgo.com"
+		},
+		"missionStatement": {
+			"statements": {
+				"safetyFirst": "安全至上",
+				"communityDriven": "社群為本",
+				"petFocused": "以寵物為中心",
+				"trustedPartners": "值得信賴的夥伴",
+				"innovation": "創新",
+				"compassion": "同理心"
+			}
+		}
+
+	},
+	"common": {
+		"loading": "載入中...",
+		"error": "錯誤"
+	},
+	"services": {
+		"socialNetworking": {
+			"title": "社群交流",
+			"description": "與鄰近或遠方的飼主建立連結。",
+			"features": {
+				"profiles": "寵物檔案與照片分享",
+				"groups": "在地社群小組",
+				"events": "活動規劃與協調",
+				"playdates": "玩伴與散步排程",
+				"venues": "寵物友善場地探索"
+			}
+		},
+		"professionalServices": {
+			"title": "專業服務",
+			"description": "取得經過驗證的寵物專業人員提供各種照護需求。",
+			"features": {
+				"veterinary": "獸醫諮詢",
+				"sitting": "專業寵物看護",
+				"walking": "遛狗服務",
+				"grooming": "美容與 spa 照護",
+				"training": "訓練與行為支援"
+			}
+		},
+		"emergencySupport": {
+			"title": "緊急支援",
+			"description": "在您最需要時，透過我們的緊急網絡取得協助。",
+			"features": {
+				"contacts": "24/7 緊急聯絡人",
+				"lostPet": "走失寵物通報系統",
+				"veterinaryReferrals": "緊急獸醫轉介",
+				"rescue": "社群救援協調",
+				"crisis": "危機支援網絡"
+			}
+		},
+		"education": {
+			"title": "教育與資源",
+			"description": "與專家一起學習，成為更好的飼主。",
+			"features": {
+				"articles": "專家文章與指南",
+				"tutorials": "訓練教學與技巧",
+				"health": "健康與營養建議",
+				"breeds": "品種專屬資訊",
+				"qa": "與專業人士的問答"
+			}
+		},
+		"marketplace": {
+			"title": "市集",
+			"description": "尋找並分享寵物相關商品與服務。",
+			"features": {
+				"buysell": "買賣寵物用品",
+				"recommendations": "服務推薦",
+				"reviews": "商品評論與評分",
+				"directory": "在地商家目錄",
+				"classifieds": "分類廣告"
+			}
+		},
+		"healthTracking": {
+			"title": "健康追蹤",
+			"description": "為寵物保留完整的健康紀錄。",
+			"features": {
+				"vaccinations": "疫苗記錄追蹤",
+				"history": "病史儲存",
+				"reminders": "預約提醒",
+				"medications": "用藥時間表",
+				"milestones": "健康里程碑追蹤"
+			}
+		}
+	},
+	"values": {
+		"petSafety": {
+			"title": "以寵物安全為首要",
+			"description": "我們的每項決策都優先考量寵物與其家庭的福祉與安全。",
+			"examples": {
+				"backgroundChecks": "對服務提供者進行完整的背景調查",
+				"monitoring": "服務期間的即時安全監控",
+				"protocols": "緊急應變流程與訓練",
+				"education": "持續的安全教育",
+				"zeroTolerance": "對任何形式的虐待或疏忽採取零容忍政策"
+			}
+		},
+		"communityFirst": {
+			"title": "社群優先",
+			"description": "我們相信社群的力量能豐富寵物與人類的生活。",
+			"examples": {
+				"connections": "促進寵物家庭之間的真誠連結",
+				"localBusiness": "支持在地寵物商家與服務",
+				"inclusive": "為各類飼主創造包容的空間",
+				"knowledge": "鼓勵知識分享與互助",
+				"friendships": "透過對寵物的共同熱愛建立長久友誼"
+			}
+		},
+		"transparency": {
+			"title": "透明與信任",
+			"description": "我們以完全透明的方式運作，並持續努力贏得並維持使用者的信任。",
+			"examples": {
+				"communication": "對政策與變動進行清晰與誠實的溝通",
+				"feedback": "公開的回饋管道與快速回應的支援",
+				"pricing": "透明的價格，無隱藏費用",
+				"safety": "公開的安全紀錄與事件通報",
+				"updates": "定期的社群更新與進展報告"
+			}
+		},
+		"innovation": {
+			"title": "有目的的創新",
+			"description": "我們採用技術與創新來更好地服務寵物與其家庭。",
+			"examples": {
+				"aiMatching": "以 AI 驅動的匹配，找出適合的寵物與飼主",
+				"monitoring": "先進的安全監控與警示系統",
+				"health": "預測性健康洞見與預防提醒",
+				"experience": "在各裝置上提供順暢的使用體驗",
+				"improvements": "根據使用者回饋持續改進平台"
+			}
+		},
+		"inclusivity": {
+			"title": "包容與無障礙",
+			"description": "每位飼主都應該能接觸到社群與照護資源，無論其情況如何。",
+			"examples": {
+				"multilingual": "支援多語以服務多元社群",
+				"accessibility": "為有障礙的使用者提供無障礙功能",
+				"pricing": "提供彈性的價格選項以適應不同經濟狀況",
+				"allPets": "支援各類寵物與家庭型態",
+				"education": "為初次飼主提供教育資源"
+			}
+		},
+		"environmental": {
+			"title": "環境責任",
+			"description": "我們關心寵物所居住的地球，並推廣永續的做法。",
+			"examples": {
+				"carbon": "平台營運達成碳中和目標",
+				"ecoFriendly": "推廣環保的寵物產品與服務",
+				"local": "支持在地商家以減少運輸影響",
+				"responsible": "鼓勵負責任的飼養行為",
+				"conservation": "與環保保育組織合作"
+			}
+		}
+	},
+	"safety": {
+		"userVerification": {
+			"title": "使用者驗證",
+			"description": "完整的驗證流程以確保社群安全。",
+			"measures": {
+				"idVerification": "政府身分證驗證",
+				"backgroundChecks": "對服務提供者進行背景調查",
+				"licenseVerification": "專業資格證照驗證",
+				"references": "參考人與評價查核",
+				"monitoring": "持續監控安全違規",
+				"reverification": "定期重新驗證資格"
+			}
+		},
+		"petProtection": {
+			"title": "寵物保護",
+			"description": "在所有互動中採取具體措施以保護寵物。",
+			"measures": {
+				"vaccination": "疫苗記錄驗證",
+				"assessment": "寵物行為評估要求",
+				"tracking": "服務期間的即時定位追蹤",
+				"emergency": "緊急聯絡通知",
+				"insurance": "服務之寵物保險驗證",
+				"hotline": "24/7 緊急獸醫專線"
+			}
+		},
+		"communityMonitoring": {
+			"title": "社群監控",
+			"description": "主動監控以維持社群標準。",
+			"measures": {
+				"aiModeration": "AI 驅動的內容審查",
+				"humanReview": "對所有檢舉內容進行人工審核",
+				"alerts": "主動的安全警示系統",
+				"reporting": "社群檢舉機制",
+				"audits": "定期的安全審核與評估",
+				"response": "透明的事件回應程序"
+			}
+		},
+		"dataSecurity": {
+			"title": "資料安全",
+			"description": "以企業等級的安全措施保護使用者與寵物資訊。",
+			"measures": {
+				"encryption": "通訊端到端加密",
+				"storage": "安全加密的資料儲存",
+				"audits": "定期的安全稽核與滲透測試",
+				"compliance": "遵循 GDPR 與 CCPA",
+				"minimal": "最小化資料收集原則",
+				"rights": "刪除權與資料可攜性權利"
+			}
+		}
+	},
+	"stats": {
+		"activeFamilies": "活躍的寵物家庭",
+		"registeredPets": "已註冊的寵物",
+		"cities": "遍佈城市",
+		"rating": "平均評分"
+	},
+	"partnerships": {
+		"animalShelters": {
+			"title": "動物收容所",
+			"description": "支持寵物認養與救援工作"
+		},
+		"veterinaryClinics": {
+			"title": "獸醫診所",
+			"description": "連結寵物與優質醫療照護"
+		},
+		"petBusinesses": {
+			"title": "寵物商家",
+			"description": "推廣在地寵物服務與商品"
+		}
+	},
+	"technology": {
+		"aiMatching": {
+			"title": "AI 驅動匹配",
+			"description": "輕量化演算法協助建議相關配對，同時將資料暴露降到最低，並以使用者隱私為核心。",
+			"benefits": {
+				"compatibility": "基於個性化的相容性建議（以在地優先為原則）",
+				"location": "以最低精度暴露的地點感知建議",
+				"activity": "不另行存儲額外個資的活動偏好匹配",
+				"professional": "採取選擇性加入的專業推薦",
+				"safety": "以安全信號為主，避免大範圍剖析"
+			}
+		},
+		"safetyMonitoring": {
+			"title": "即時安全監控",
+			"description": "先進的監控系統確保所有互動中寵物與飼主的安全。",
+			"benefits": {
+				"gps": "散步與服務期間的 GPS 追蹤",
+				"checkins": "自動化安全打卡",
+				"alerts": "緊急警示系統",
+				"detection": "事件偵測與回應",
+				"assessment": "預測性安全風險評估"
+			}
+		},
+		"healthIntegration": {
+			"title": "健康整合",
+			"description": "與獸醫系統及健康追蹤裝置無縫整合。",
+			"benefits": {
+				"reminders": "自動化疫苗提醒",
+				"analysis": "健康趨勢分析與洞見",
+				"wearables": "可穿戴裝置資料整合",
+				"records": "獸醫紀錄同步",
+				"preventive": "預防性照護建議"
+			}
+		},
+		"smartCommunication": {
+			"title": "智慧溝通",
+			"description": "能促成清晰且安全溝通的智慧訊息系統。",
+			"benefits": {
+				"translation": "為多語使用者提供自動翻譯",
+				"protocols": "以安全為先的通訊協定",
+				"emergency": "緊急通訊渠道",
+				"consultation": "專業諮詢工具",
+				"moderation": "社群討論的審核管理"
+			}
+		}
+	},
+	"future": {
+		"globalExpansion": {
+			"title": "全球擴展",
+			"description": "讓 PawGo 可供全球的寵物家庭使用，並提供在地化的支援與服務。"
+		},
+		"aiHealth": {
+			"title": "AI 健康洞見",
+			"description": "進階 AI 提供個人化的健康建議與早期警示系統。"
+		},
+		"zeroHomelessness": {
+			"title": "零寵物流浪",
+			"description": "與收容所及救援組織合作，努力確保每隻寵物都找到溫暖的永遠之家。"
+		}
+	},
+	"misc": {
+		"howWeLiveValue": "我們如何實踐這些價值：",
+		"quickFacts": "快速資訊",
+		"communityPartnerships": "我們很榮幸能與動物保護組織、獸醫診所及寵物商家合作，打造更強大、互聯的寵物社群。",
+		"safetyTrust": "安全與信任",
+		"communityImpact": "社群影響力",
+		"founderLocation": "所在地："
+	},
+	"nav": {
+		"playground": "Playground",
+		"privacy": "隱私",
+		"terms": "使用條款",
+		"about": "關於"
+	},
+	"terms": {
+		"title": "服務條款",
+		"description": "使用本寵物社群平台時之綜合指引，請安全且負責任地使用。",
+		"lastUpdated": "最後更新",
+		"tableOfContents": "目錄",
+		"sections": {
+			"agreement": "1. 協議與接受",
+			"userResponsibilities": "2. 作為 PawGo 會員的責任",
+			"petSafety": "3. 寵物安全與照護標準",
+			"communityGuidelines": "4. 社群指引與行為準則",
+			"ageRequirements": "5. 年齡限制與未成年保護",
+			"serviceProviders": "6. 服務提供者條款",
+			"liability": "7. 責任與保險",
+			"platformRules": "8. 平台規範與執行",
+			"payments": "9. 付款與退款",
+			"termination": "10. 帳號終止",
+			"disputes": "11. 爭議解決",
+			"legal": "12. 法律資訊"
+		},
+		"alerts": {
+			"welcomeTitle": "歡迎使用 PawGo！",
+			"welcomeDesc": "使用本平台表示您加入一個重視寵物安全與負責任飼養的社群。",
+			"importantTitle": "重要",
+			"importantDesc": "若您不同意這些條款，請勿使用 PawGo。我們致力於保護社群中每一位成員。",
+			"petSafetyTitle": "以寵物安全為先",
+			"petSafetyDesc": "寵物的福祉是我們的最高優先事項。這些標準不可協商。"
+		}
+	},
+	"playground": {
+		"title": "Playground",
+		"description": "探索並測試 PawGo 的各種功能。",
+		"chat": {
+			"title": "聊天測試區",
+			"btn": {
+				"start": "開始聊天",
+				"stop": "停止聊天",
+				"reset": "重置聊天",
+				"send": "傳送",
+				"placeholder": "輸入您的訊息..."
+			}
+		}
+	}
+}

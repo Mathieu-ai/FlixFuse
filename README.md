@@ -38,6 +38,17 @@ yarn dev
 bun run dev
 ```
 
+
+### Audio uploads → MP3
+
+- Voice recordings are captured in the browser using MediaRecorder (webm/ogg).
+- The server upload endpoint will attempt to transcode audio uploads to MP3 using `ffmpeg`.
+- If `ffmpeg` is available on the host, uploads will return `.mp3` URLs; otherwise the original format is returned.
+- To enable conversion locally, install ffmpeg:
+	- macOS (Homebrew): `brew install ffmpeg`
+	- Linux: use your distro package manager
+	- Windows: install ffmpeg and ensure it’s on PATH
+
 ## Production
 
 Build the application for production:

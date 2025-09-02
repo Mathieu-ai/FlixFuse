@@ -27,3 +27,4 @@ logs
 server/media/*
 #postgres
 data/postgres/*
+/app/generated/prisma
